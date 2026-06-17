@@ -1,0 +1,128 @@
+---
+// Code d'acces — change la valeur ici
+const CODE = 'mines26';
+---
+
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jean Marcus</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: #FBFAF7;
+      font-family: "Georgia", serif;
+      color: #1A1A1A;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 2rem;
+    }
+
+    p.name {
+      font-size: 1rem;
+      font-family: system-ui, sans-serif;
+      font-weight: 500;
+      color: #1A1A1A;
+      letter-spacing: 0.02em;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    input {
+      width: 14rem;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid #E8E5DD;
+      background: #FBFAF7;
+      font-family: "Georgia", serif;
+      font-size: 1rem;
+      color: #1A1A1A;
+      text-align: center;
+      letter-spacing: 0.08em;
+      outline: none;
+      transition: border-color 120ms;
+    }
+
+    input:focus {
+      border-color: #1F3A5F;
+    }
+
+    input::placeholder {
+      color: #BCBAB4;
+      letter-spacing: 0.01em;
+    }
+
+    button {
+      font-family: system-ui, sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #5C5C5C;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.3rem 0;
+      transition: color 120ms;
+    }
+
+    button:hover { color: #1A1A1A; }
+
+    #error {
+      font-family: system-ui, sans-serif;
+      font-size: 0.78rem;
+      color: #5C5C5C;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="name">Jean Marcus</p>
+    <form id="gate">
+      <input
+        type="text"
+        id="code"
+        placeholder="code d'accès"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        autofocus
+      />
+      <button type="submit">Entrer</button>
+      <span id="error" hidden>Code incorrect.</span>
+    </form>
+  </main>
+
+  <script define:vars={{ CODE }}>
+    if (localStorage.getItem('wip') === '1') {
+      window.location.replace('/');
+    }
+
+    document.getElementById('gate').addEventListener('submit', e => {
+      e.preventDefault();
+      if (document.getElementById('code').value.trim() === CODE) {
+        localStorage.setItem('wip', '1');
+        window.location.replace('/');
+      } else {
+        document.getElementById('error').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -31,7 +31,7 @@ const pageTitle    = title === 'Jean Marcus' ? title : `${title} — Jean Marcus
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    {noIndex && <meta name="robots" content="noindex" />}
+    <meta name="robots" content="noindex, nofollow" />
 
     <!-- OpenGraph -->
     <meta property="og:type"        content="website" />
@@ -57,6 +57,11 @@ const pageTitle    = title === 'Jean Marcus' ? title : `${title} — Jean Marcus
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    <script is:inline>
+      if (!localStorage.getItem('wip')) {
+        window.location.replace('/entrer');
+      }
+    </script>
     <Header />
     <main>
       <slot />
