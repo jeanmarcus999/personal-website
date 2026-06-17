@@ -1,0 +1,50 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const nav = [
+  { href: `${base}/`,         label: 'Accueil'  },
+  { href: `${base}/parcours`, label: 'Parcours' },
+  { href: `${base}/ecrits`,   label: 'Écrits'   },
+  { href: `${base}/contact`,  label: 'Contact'  },
+];
+
+const path = new URL(Astro.request.url).pathname;
+
+function isActive(href: string): boolean {
+  const normalized = href.endsWith('/') ? href : href + '/';
+  const pathNorm   = path.endsWith('/')  ? path  : path  + '/';
+  if (href === `${base}/`) return pathNorm === normalized || pathNorm === `${base}/`;
+  return pathNorm.startsWith(normalized);
+}
+---
+
+<header class="border-b border-rule">
+  <div class="page-wrapper">
+    <nav
+      class="flex items-center justify-between py-[1.1rem]"
+      aria-label="Navigation principale"
+    >
+      <a
+        href={`${base}/`}
+        class="font-serif text-[1rem] font-medium text-ink"
+        style="text-decoration:none"
+      >
+        Jean Marcus
+      </a>
+
+      <ul class="flex items-center gap-7 list-none m-0 p-0">
+        {nav.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class="nav-item"
+              aria-current={isActive(href) ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

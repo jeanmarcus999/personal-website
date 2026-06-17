@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const recent = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout>
+  <div class="page-wrapper">
+
+    <!-- Bloc d'introduction -->
+    <section class="pt-16 pb-20 md:pt-24 md:pb-28">
+      <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] text-ink mb-5 tracking-[-0.01em]">
+        Jean Marcus
+      </h1>
+      <p class="font-sans text-[0.88rem] text-muted tracking-[0.02em] mb-10">
+        Financement et déploiement des technologies stratégiques en Europe.
+      </p>
+      <div class="prose-body font-serif text-[1.05rem] leading-[1.8] text-ink space-y-4">
+        <p>
+          Élève à l'École Polytechnique, en internat de recherche en économie au MIT sous la
+          direction d'Esther Duflo, entrant au Corps des Mines en septembre 2026.
+        </p>
+        <p>
+          Mon travail porte sur les conditions de financement et les structures de capital qui
+          permettent aux entreprises européennes de déployer des systèmes d'intelligence
+          artificielle à l'échelle, dans un contexte où la dynamique d'investissement mondiale
+          est dictée depuis les États-Unis.
+        </p>
+        <p>
+          Je m'intéresse en particulier aux mécanismes par lesquels l'épargne européenne et
+          les investisseurs institutionnels peuvent être orientés vers le financement de cette
+          transition, ainsi qu'aux contraintes réglementaires qui en définissent le périmètre.
+        </p>
+      </div>
+    </section>
+
+    <!-- Écrits récents -->
+    <section class="mb-24">
+      <span class="section-label">Écrits récents</span>
+      <div>
+        {recent.map(post => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.id}
+          />
+        ))}
+      </div>
+      <div class="mt-6">
+        <a
+          href={`${base}/ecrits`}
+          class="meta"
+          style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+        >
+          Tous les écrits →
+        </a>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="mb-4">
+      <span class="section-label">Contact</span>
+      <div class="pt-5 space-y-2">
+        <p class="meta">
+          Email :&nbsp;
+          <a
+            href="mailto:marcusjean501@gmail.com"
+            style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+          >
+            marcusjean501@gmail.com
+          </a>
+        </p>
+        <p class="meta">
+          LinkedIn :&nbsp;
+          <a
+            href="https://linkedin.com/in/jean-marcus"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+          >
+            linkedin.com/in/jean-marcus
+          </a>
+        </p>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>

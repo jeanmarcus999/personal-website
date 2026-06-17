@@ -1,0 +1,66 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?:       string;
+  description?: string;
+  ogImage?:     string;
+  noIndex?:     boolean;
+}
+
+const {
+  title       = 'Jean Marcus',
+  description = 'Notes sur le financement et le deploiement des technologies strategiques en Europe.',
+  ogImage     = '/og-default.png',
+  noIndex     = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const pageTitle    = title === 'Jean Marcus' ? title : `${title} — Jean Marcus`;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noIndex && <meta name="robots" content="noindex" />}
+
+    <!-- OpenGraph -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url"         content={canonicalURL} />
+    <meta property="og:image"       content={new URL(ogImage, Astro.site)} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={new URL(ogImage, Astro.site)} />
+
+    <!-- RSS -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Jean Marcus — Ecrits"
+      href={new URL('rss.xml', Astro.site)}
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

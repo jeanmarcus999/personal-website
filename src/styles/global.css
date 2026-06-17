@@ -1,0 +1,118 @@
+@import '@fontsource-variable/source-serif-4';
+@import '@fontsource-variable/inter';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-canvas:  #FBFAF7;
+    --color-ink:     #1A1A1A;
+    --color-muted:   #5C5C5C;
+    --color-accent:  #1F3A5F;
+    --color-rule:    #E8E5DD;
+  }
+
+  html {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: #1F3A5F18;
+  }
+
+  /* Liens dans le corps du texte : toujours soulignés */
+  .prose-body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  .prose-body a:hover {
+    opacity: 0.7;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+
+  /* ── Conteneur ─────────────────────────────────────── */
+  .page-wrapper {
+    @apply mx-auto w-full max-w-reading px-6 md:px-0;
+  }
+
+  /* ── Libelles de section ────────────────────────────── */
+  /* ex : FORMATION, ECRITS RECENTS                       */
+  .section-label {
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    display: block;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-rule);
+    margin-bottom: 0;
+    user-select: none;
+  }
+
+  /* ── Navigation ─────────────────────────────────────── */
+  .nav-item {
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 120ms ease;
+  }
+
+  .nav-item:hover,
+  .nav-item[aria-current="page"] {
+    color: var(--color-ink);
+  }
+
+  /* ── Carte de billet ────────────────────────────────── */
+  .post-card {
+    padding: 1.6rem 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .post-card:first-of-type {
+    border-top: 1px solid var(--color-rule);
+  }
+
+  /* ── Entree de parcours ─────────────────────────────── */
+  .parcours-row {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    column-gap: 2rem;
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .parcours-row:first-of-type {
+    border-top: 1px solid var(--color-rule);
+  }
+
+  /* ── Meta (date, duree) ─────────────────────────────── */
+  .meta {
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    letter-spacing: 0.01em;
+  }
+}

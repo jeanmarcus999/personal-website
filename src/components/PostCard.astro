@@ -1,0 +1,35 @@
+---
+interface Props {
+  title:       string;
+  description: string;
+  pubDate:     Date;
+  slug:        string;
+}
+
+const { title, description, pubDate, slug } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const dateStr = pubDate.toLocaleDateString('fr-FR', {
+  day:   'numeric',
+  month: 'long',
+  year:  'numeric',
+});
+---
+
+<article class="post-card">
+  <p class="meta mb-2">{dateStr}</p>
+  <h2 class="font-serif text-[1.15rem] font-medium leading-snug text-ink mb-2 mt-0">
+    <a
+      href={`${base}/ecrits/${slug}`}
+      class="text-ink"
+      style="text-decoration:none"
+      onmouseover="this.style.textDecoration='underline';this.style.textDecorationColor='#1F3A5F';this.style.textDecorationThickness='1px';this.style.textUnderlineOffset='3px'"
+      onmouseout="this.style.textDecoration='none'"
+    >
+      {title}
+    </a>
+  </h2>
+  <p class="font-serif text-[0.95rem] text-muted leading-relaxed m-0">
+    {description}
+  </p>
+</article>

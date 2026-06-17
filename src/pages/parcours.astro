@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const formation = [
+  {
+    years: '2022 – 2026',
+    title: 'École Polytechnique',
+    sub:   'Cycle ingénieur, Paris-Saclay',
+    desc:  'Formation scientifique et technologique. Majeure en économie et sciences des données.',
+  },
+  {
+    years: '2025 – 2026',
+    title: 'MIT, Department of Economics',
+    sub:   'Internat de recherche, Cambridge MA',
+    desc:  "Recherche en économie du développement sous la direction d'Esther Duflo. Focus sur les effets de l'investissement technologique dans les économies émergentes.",
+  },
+  {
+    years: 'Sept. 2026',
+    title: 'Corps des Mines',
+    sub:   'Mines Paris, PSL',
+    desc:  "Formation à l'interface de l'ingénierie, de l'administration et de l'économie industrielle.",
+  },
+];
+---
+
+<BaseLayout
+  title="Parcours"
+  description="Parcours de Jean Marcus : École Polytechnique, MIT, Corps des Mines."
+>
+  <div class="page-wrapper">
+
+    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-16 md:pt-24">
+      Parcours
+    </h1>
+
+    <!-- Formation -->
+    <section class="mb-14">
+      <span class="section-label">Formation</span>
+      <div>
+        {formation.map(e => (
+          <div class="parcours-row">
+            <span class="meta pt-[0.2rem]">{e.years}</span>
+            <div>
+              <p class="font-serif text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
+              <p class="meta mb-1">{e.sub}</p>
+              <p class="font-serif text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Recherche et expériences -->
+    <section class="mb-14">
+      <span class="section-label">Recherche et expériences</span>
+      <div class="parcours-row">
+        <span class="meta"></span>
+        <p class="font-serif text-[0.95rem] text-muted italic mt-0 mb-0">À compléter.</p>
+      </div>
+    </section>
+
+    <!-- Distinctions -->
+    <section class="mb-16">
+      <span class="section-label">Distinctions</span>
+      <div class="parcours-row">
+        <span class="meta"></span>
+        <p class="font-serif text-[0.95rem] text-muted italic mt-0 mb-0">À compléter.</p>
+      </div>
+    </section>
+
+    <div class="mb-4">
+      <a
+        href="/cv.pdf"
+        download
+        class="meta"
+        style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+      >
+        Télécharger le CV en PDF →
+      </a>
+    </div>
+
+  </div>
+</BaseLayout>

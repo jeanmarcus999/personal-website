@@ -1,0 +1,50 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title:       string;
+  description: string;
+  pubDate:     Date;
+}
+
+const { title, description, pubDate } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const dateStr = pubDate.toLocaleDateString('fr-FR', {
+  day:   'numeric',
+  month: 'long',
+  year:  'numeric',
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="page-wrapper">
+    <article class="pt-16 pb-20 md:pt-24">
+
+      <!-- En-tête du billet -->
+      <header class="mb-12 pb-8 border-b border-rule">
+        <h1 class="font-serif text-[1.9rem] md:text-[2.4rem] font-semibold leading-[1.2] tracking-[-0.01em] text-ink mb-4">
+          {title}
+        </h1>
+        <p class="meta">{dateStr}</p>
+      </header>
+
+      <!-- Corps -->
+      <div class="prose">
+        <slot />
+      </div>
+
+      <!-- Pied du billet -->
+      <footer class="mt-16 pt-6 border-t border-rule">
+        <a
+          href={`${base}/ecrits`}
+          class="meta"
+          style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+        >
+          ← Retour aux écrits
+        </a>
+      </footer>
+
+    </article>
+  </div>
+</BaseLayout>
