@@ -1,7 +1,7 @@
 ---
 title: "L'IA et la transition écologique : des temporalités difficiles à aligner"
 description: "Le déploiement de l'IA agit comme un choc d'infrastructure, porté par une logique de gains immédiats. Cette logique entre en tension structurelle avec la transition écologique, qui repose sur des horizons longs et des arbitrages politiques stables."
-pubDate: 2022-11-30
+pubDate: 2026-06-15
 draft: false
 coauthors:
   - Henrik Berger
