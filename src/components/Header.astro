@@ -2,38 +2,42 @@
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const nav = [
-  { href: `${base}/`,          label: 'Accueil'  },
-  { href: `${base}/parcours`,  label: 'Parcours' },
-  { href: `${base}/ecrits`,    label: 'Écrits'   },
-  { href: `${base}/lectures`,  label: 'Lectures' },
-  { href: `${base}/contact`,   label: 'Contact'  },
+  { href: `${base}/`,         label: 'Accueil'  },
+  { href: `${base}/parcours`, label: 'Parcours' },
+  { href: `${base}/ecrits`,   label: 'Écrits'   },
+  { href: `${base}/lectures`, label: 'Lectures' },
+  { href: `${base}/contact`,  label: 'Contact'  },
 ];
 
 const path = new URL(Astro.request.url).pathname;
 
 function isActive(href: string): boolean {
-  const normalized = href.endsWith('/') ? href : href + '/';
-  const pathNorm   = path.endsWith('/')  ? path  : path  + '/';
-  if (href === `${base}/`) return pathNorm === normalized || pathNorm === `${base}/`;
-  return pathNorm.startsWith(normalized);
+  const h = href.endsWith('/') ? href : href + '/';
+  const p = path.endsWith('/')  ? path  : path  + '/';
+  if (href === `${base}/`) return p === h || p === `${base}/`;
+  return p.startsWith(h);
 }
 ---
 
 <header class="border-b border-rule">
   <div class="page-wrapper">
+    <!--
+      Mobile  : nom sur toute la largeur (w-full), nav en dessous (flex-wrap)
+      Desktop : nom à gauche, nav à droite sur une seule ligne
+    -->
     <nav
-      class="flex items-center justify-between py-[1.1rem]"
+      class="flex flex-wrap items-baseline gap-x-7 gap-y-2 py-4 sm:flex-nowrap sm:justify-between sm:py-[1.05rem]"
       aria-label="Navigation principale"
     >
       <a
         href={`${base}/`}
-        class="font-serif text-[1rem] font-medium text-ink"
+        class="w-full font-serif text-[1rem] font-medium text-ink sm:w-auto"
         style="text-decoration:none"
       >
         Jean Marcus
       </a>
 
-      <ul class="flex items-center gap-7 list-none m-0 p-0">
+      <ul class="flex flex-wrap items-center gap-x-5 gap-y-1 list-none m-0 p-0 sm:flex-nowrap sm:gap-6">
         {nav.map(({ href, label }) => (
           <li>
             <a

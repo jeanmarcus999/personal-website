@@ -47,7 +47,7 @@ const recherche = [
   {
     years: '2025 à 2026',
     title: 'INRIA Sierra',
-    sub:   'Sous la direction d\'Umut Şimşekli',
+    sub:   "Sous la direction d'Umut Şimşekli",
     desc:  "Bornes de généralisation dépendantes des données en apprentissage profond. Mesures géométriques de complexité, stabilité algorithmique.",
   },
   {
@@ -65,69 +65,63 @@ const recherche = [
 >
   <div class="page-wrapper">
 
-    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-10 md:pt-24">
-      Parcours
-    </h1>
+    <h1 class="page-title">Parcours</h1>
 
-    <div class="prose-body font-serif text-[1.05rem] leading-[1.8] text-ink mb-16 max-w-reading">
+    <div class="prose-body font-serif text-[1rem] sm:text-[1.05rem] leading-[1.8] text-ink mb-12 sm:mb-16">
       <p>
         [Paragraphe biographique à écrire par Jean. Deux à trois phrases reliant formation et sujet intellectuel.]
       </p>
     </div>
 
-    <!-- Formation -->
-    <section class="mb-14">
+    <section class="mb-12 sm:mb-14">
       <span class="section-label">Formation</span>
       <div>
         {formation.map(e => (
           <div class="parcours-row">
-            <span class="meta pt-[0.15rem]">{e.years}</span>
+            <span class="meta">{e.years}</span>
             <div>
-              <p class="font-serif text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
+              <p class="font-serif text-[1rem] sm:text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
               <p class="meta mb-1">{e.sub}</p>
-              <p class="font-serif text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
+              <p class="font-serif text-[0.9rem] sm:text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
             </div>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- Expérience -->
-    <section class="mb-14">
+    <section class="mb-12 sm:mb-14">
       <span class="section-label">Expérience</span>
       <div>
         {experience.map(e => (
           <div class="parcours-row">
-            <span class="meta pt-[0.15rem]">{e.years}</span>
+            <span class="meta">{e.years}</span>
             <div>
-              <p class="font-serif text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
+              <p class="font-serif text-[1rem] sm:text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
               <p class="meta mb-1">{e.sub}</p>
-              <p class="font-serif text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
+              <p class="font-serif text-[0.9rem] sm:text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
             </div>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- Travaux de recherche -->
-    <section class="mb-14">
+    <section class="mb-12 sm:mb-14">
       <span class="section-label">Travaux de recherche</span>
       <div>
         {recherche.map(e => (
           <div class="parcours-row">
-            <span class="meta pt-[0.15rem]">{e.years}</span>
+            <span class="meta">{e.years}</span>
             <div>
-              <p class="font-serif text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
+              <p class="font-serif text-[1rem] sm:text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
               <p class="meta mb-1">{e.sub}</p>
-              <p class="font-serif text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
+              <p class="font-serif text-[0.9rem] sm:text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
             </div>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- Centres d'intérêt -->
-    <section class="mb-16">
+    <section class="mb-14 sm:mb-16">
       <span class="section-label">Centres d'intérêt</span>
       <div class="parcours-row">
         <span class="meta"></span>
@@ -139,13 +133,8 @@ const recherche = [
       </div>
     </section>
 
-    <div class="mb-4">
-      <a
-        href="/cv.pdf"
-        download
-        class="meta"
-        style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
-      >
+    <div class="mb-6">
+      <a href="/cv.pdf" download class="meta" style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">
         Télécharger le CV en PDF →
       </a>
     </div>

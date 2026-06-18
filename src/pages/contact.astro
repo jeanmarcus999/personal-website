@@ -2,17 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout
-  title="Contact"
-  description="Contacter Jean Marcus."
->
+<BaseLayout title="Contact" description="Contacter Jean Marcus.">
   <div class="page-wrapper">
-
-    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-10 md:pt-24">
-      Contact
-    </h1>
-
-    <div class="prose-body font-serif text-[1.05rem] leading-[1.8] text-ink mb-12 max-w-reading">
+    <h1 class="page-title">Contact</h1>
+    <div class="prose-body font-serif text-[1rem] sm:text-[1.05rem] leading-[1.8] text-ink mb-10 sm:mb-12">
       <p>
         Heureux d'être contacté pour échanger sur le financement du déploiement des
         technologies stratégiques en Europe, les structures de capital adaptées aux
@@ -21,29 +14,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         économique et industrielle.
       </p>
     </div>
-
     <div class="space-y-3">
       <p class="meta">
         Email :&nbsp;
-        <a
-          href="mailto:jean.marcus@icloud.com"
-          style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
-        >
+        <a href="mailto:jean.marcus@icloud.com" style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">
           jean.marcus@icloud.com
         </a>
       </p>
       <p class="meta">
         LinkedIn :&nbsp;
-        <a
-          href="https://linkedin.com/in/jean-marcus"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
-        >
+        <a href="https://linkedin.com/in/jean-marcus" target="_blank" rel="noopener noreferrer" style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">
           linkedin.com/in/jean-marcus
         </a>
       </p>
     </div>
-
   </div>
 </BaseLayout>

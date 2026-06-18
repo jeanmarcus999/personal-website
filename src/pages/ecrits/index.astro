@@ -6,7 +6,6 @@ import PostCard from '../../components/PostCard.astro';
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const sorted = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// Grouper par année
 const byYear = sorted.reduce<Record<number, typeof sorted>>((acc, post) => {
   const year = post.data.pubDate.getFullYear();
   if (!acc[year]) acc[year] = [];
@@ -22,18 +21,13 @@ const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
   description="Notes sur le financement et le déploiement des technologies stratégiques en Europe."
 >
   <div class="page-wrapper">
-
-    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-6 md:pt-24">
-      Écrits
-    </h1>
-
-    <p class="font-serif text-[1rem] text-muted leading-relaxed mb-14 max-w-reading">
+    <h1 class="page-title">Écrits</h1>
+    <p class="font-serif text-[0.95rem] sm:text-[1rem] text-muted leading-relaxed mb-12 sm:mb-14">
       Notes sur le financement et le déploiement des technologies stratégiques en Europe.
       Format libre, longueur variable.
     </p>
-
     {years.map(year => (
-      <section class="mb-12">
+      <section class="mb-10">
         <span class="section-label">{year}</span>
         <div>
           {byYear[year].map(post => (
@@ -47,6 +41,5 @@ const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
         </div>
       </section>
     ))}
-
   </div>
 </BaseLayout>
