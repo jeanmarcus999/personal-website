@@ -5,9 +5,51 @@ const months: Array<{
   label: string;
   entries: Array<{ author: string; title: string; year: number; note: string }>;
 }> = [
-  { label: 'Juin 2026',  entries: [] },
-  { label: 'Mai 2026',   entries: [] },
-  { label: 'Avril 2026', entries: [] },
+  {
+    label: 'Juin 2026',
+    entries: [
+      {
+        author: 'Robert Greene',
+        title:  'Mastery',
+        year:   2012,
+        note:   "Une étude des trajectoires d'excellence dans des domaines très différents, de Léonard de Vinci à Darwin en passant par John Coltrane. Greene identifie les patterns communs : apprentissage long, immersion totale, rejet des raccourcis. Utile pour penser la formation intellectuelle sur le long terme.",
+      },
+      {
+        author: 'Samuel Huntington',
+        title:  'The Clash of Civilizations and the Remaking of World Order',
+        year:   1996,
+        note:   "L'hypothèse que les conflits post-guerre froide seront structurés par les lignes de fracture culturelles et civilisationnelles plutôt qu'idéologiques. Contesté mais indispensable : difficile de penser la géopolitique contemporaine sans avoir lu et discuté Huntington.",
+      },
+    ],
+  },
+  {
+    label: 'Mai 2026',
+    entries: [
+      {
+        author: 'Malcolm Gladwell',
+        title:  'Outliers',
+        year:   2008,
+        note:   "Gladwell déconstruit le mythe du génie solitaire et démontre que la réussite exceptionnelle dépend davantage des opportunités structurelles, du contexte familial et du moment de naissance que du seul talent individuel. La règle des 10 000 heures reste discutable, mais le cadre général est stimulant.",
+      },
+    ],
+  },
+  {
+    label: 'Avril 2026',
+    entries: [
+      {
+        author: 'John Rawls',
+        title:  'A Theory of Justice',
+        year:   1971,
+        note:   "Le texte fondateur du libéralisme politique contemporain. Rawls reconstruit les principes de justice à partir de l'expérience de pensée du voile d'ignorance : quelles règles choisirions-nous si nous ignorions la place que nous occuperions dans la société ? Un cadre de référence incontournable pour toute réflexion sur la redistribution et l'action publique.",
+      },
+      {
+        author: 'Robert Nozick',
+        title:  'Anarchy, State, and Utopia',
+        year:   1974,
+        note:   "La réponse libertarienne à Rawls, publiée trois ans après. Nozick défend l'État minimal et l'inviolabilité des droits individuels contre toute redistribution forcée, même au nom de la justice. À lire avec Rawls : les deux livres se répondent et délimitent un espace de débat encore actif.",
+      },
+    ],
+  },
 ];
 ---
 
