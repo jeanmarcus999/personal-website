@@ -137,9 +137,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: 0.6rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #363636;
+    color: #666;
     padding-bottom: 0.45rem;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
     margin: 1.4rem 0 0.6rem;
   }
 
@@ -150,14 +150,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   #panel-body li {
     font-family: "Inter Variable", system-ui, sans-serif;
     font-size: 0.79rem;
-    color: #666;
+    color: #aaa;
     padding: 0.28rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.025);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
     line-height: 1.5;
   }
   #panel-body li::before {
     content: '·';
-    color: #333;
+    color: #555;
     margin-right: 0.55rem;
   }
 
@@ -171,9 +171,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     z-index: 10;
   }
   #toolbar button {
-    background: rgba(255,255,255,0.035);
-    border: 1px solid rgba(255,255,255,0.09);
-    color: #555;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #888;
     cursor: pointer;
     font-family: "Inter Variable", system-ui, sans-serif;
     font-size: 0.68rem;
@@ -268,7 +268,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-family: "Inter Variable", system-ui, sans-serif;
     font-size: 0.62rem;
     letter-spacing: 0.09em;
-    color: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.25);
     text-transform: uppercase;
     pointer-events: none;
     white-space: nowrap;
@@ -459,9 +459,9 @@ const isConnected = (a: SimNode, b: SimNode) =>
 
 // Node visual config
 const NSTYLE: Record<string, { r: number; fill: string; lc: string; fs: number; fw: string }> = {
-  root: { r: 18,  fill: '#e8e8e8', lc: '#cccccc', fs: 12, fw: '600' },
-  l1:   { r: 9.5, fill: '#8a8a8a', lc: '#888888', fs: 9.5, fw: '500' },
-  l2:   { r: 4.5, fill: '#3a3a3a', lc: '#505050', fs: 8,   fw: '400' },
+  root: { r: 18,  fill: '#f0f0f0', lc: '#e0e0e0', fs: 12, fw: '600' },
+  l1:   { r: 9.5, fill: '#c0c0c0', lc: '#c8c8c8', fs: 10, fw: '500' },
+  l2:   { r: 5,   fill: '#787878', lc: '#aaaaaa', fs: 8.5, fw: '400' },
 };
 
 // ── CANVAS SETUP ─────────────────────────────────────────────
@@ -624,8 +624,8 @@ function draw() {
     ctx.moveTo(s.x, s.y);
     ctx.lineTo(t.x, t.y);
     ctx.strokeStyle = isHL
-      ? `rgba(180,180,180,${0.22 * vis})`
-      : `rgba(255,255,255,${0.05 * vis})`;
+      ? `rgba(200,200,200,${0.35 * vis})`
+      : `rgba(255,255,255,${0.12 * vis})`;
     ctx.lineWidth = isHL ? 0.7 : 0.35;
     ctx.stroke();
   }
