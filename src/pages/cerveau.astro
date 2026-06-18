@@ -1,0 +1,909 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<style is:global>
+  html:has(#brain-root) {
+    background: #0b0b0b;
+  }
+</style>
+
+<BaseLayout
+  title="Cerveau"
+  description="Carte des idées, influences intellectuelles et questions ouvertes de Jean Marcus."
+>
+  <div id="brain-root">
+    <canvas id="brain-canvas"></canvas>
+
+    <!-- Panel latéral -->
+    <aside id="side-panel" aria-hidden="true">
+      <div id="panel-hd">
+        <h2 id="panel-title"></h2>
+        <button id="panel-close" aria-label="Fermer">✕</button>
+      </div>
+      <div id="panel-body"></div>
+    </aside>
+
+    <!-- Toolbar bas gauche -->
+    <div id="toolbar">
+      <button id="btn-thought">Pensée aléatoire</button>
+      <button id="btn-timeline">Chronologie</button>
+    </div>
+
+    <!-- Pensée aléatoire -->
+    <div id="thought-box" hidden>
+      <p id="thought-text"></p>
+    </div>
+
+    <!-- Timeline -->
+    <div id="timeline-bar" hidden>
+      <span id="tl-year">2021</span>
+      <input id="tl-slider" type="range" min="2021" max="2027" value="2027" step="1">
+    </div>
+
+    <!-- Hint -->
+    <p id="brain-hint">Cliquez sur un nœud · Défilez pour zoomer</p>
+  </div>
+</BaseLayout>
+
+<style>
+  #brain-root {
+    position: relative;
+    width: 100%;
+    background: #0b0b0b;
+    overflow: hidden;
+  }
+
+  #brain-canvas {
+    display: block;
+    cursor: grab;
+  }
+  #brain-canvas:active { cursor: grabbing; }
+
+  /* ── Side panel ────────────────────────────────────────── */
+  #side-panel {
+    position: absolute;
+    top: 0; right: 0;
+    width: min(360px, 88vw);
+    height: 100%;
+    background: rgba(8,8,8,0.97);
+    border-left: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transform: translateX(101%);
+    transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    overflow-y: auto;
+    z-index: 20;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2a2a transparent;
+  }
+  #side-panel.open {
+    transform: translateX(0);
+  }
+
+  #panel-hd {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.75rem 1.5rem 1.1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: sticky;
+    top: 0;
+    background: rgba(8,8,8,0.97);
+  }
+
+  #panel-title {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #e0e0e0;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  #panel-close {
+    background: none;
+    border: none;
+    color: #444;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0.15rem 0.35rem;
+    line-height: 1;
+    transition: color 0.15s;
+    flex-shrink: 0;
+    font-family: system-ui;
+  }
+  #panel-close:hover { color: #999; }
+
+  #panel-body {
+    padding: 1.25rem 1.5rem 2.5rem;
+  }
+
+  #panel-body p.desc {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 0.88rem;
+    color: #808080;
+    line-height: 1.75;
+    margin: 0 0 1.2rem;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+
+  #panel-body .cat {
+    display: block;
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #363636;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    margin: 1.4rem 0 0.6rem;
+  }
+
+  #panel-body ul {
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  #panel-body li {
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.79rem;
+    color: #666;
+    padding: 0.28rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.025);
+    line-height: 1.5;
+  }
+  #panel-body li::before {
+    content: '·';
+    color: #333;
+    margin-right: 0.55rem;
+  }
+
+  /* ── Toolbar ────────────────────────────────────────────── */
+  #toolbar {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+  }
+  #toolbar button {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.09);
+    color: #555;
+    cursor: pointer;
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 0.42rem 0.85rem;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+  #toolbar button:hover {
+    background: rgba(255,255,255,0.07);
+    color: #aaa;
+    border-color: rgba(255,255,255,0.18);
+  }
+  #toolbar button.active {
+    color: #ccc;
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* ── Random thought ─────────────────────────────────────── */
+  #thought-box {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(500px, 82vw);
+    background: rgba(6,6,6,0.93);
+    border: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    padding: 2rem 2.2rem;
+    z-index: 30;
+    cursor: pointer;
+  }
+  #thought-text {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: #b0b0b0;
+    line-height: 1.8;
+    margin: 0;
+    text-align: center;
+  }
+
+  /* ── Timeline ───────────────────────────────────────────── */
+  #timeline-bar {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(8,8,8,0.85);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 0.6rem 1.1rem;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+  }
+  #tl-year {
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: #666;
+    min-width: 3rem;
+  }
+  #tl-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 140px; height: 1px;
+    background: rgba(255,255,255,0.12);
+    outline: none;
+    cursor: pointer;
+  }
+  #tl-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 9px; height: 9px;
+    background: #888;
+    border-radius: 50%;
+  }
+  #tl-slider::-moz-range-thumb {
+    width: 9px; height: 9px;
+    background: #888;
+    border-radius: 50%;
+    border: none;
+  }
+
+  /* ── Hint ───────────────────────────────────────────────── */
+  #brain-hint {
+    position: absolute;
+    top: 1rem; left: 50%;
+    transform: translateX(-50%);
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.09em;
+    color: rgba(255,255,255,0.12);
+    text-transform: uppercase;
+    pointer-events: none;
+    white-space: nowrap;
+    margin: 0;
+  }
+</style>
+
+<script>
+
+// ── DATA ─────────────────────────────────────────────────────
+
+const THOUGHTS = [
+  "Les révolutions technologiques échouent moins par manque d'idées que par défaut d'institutions capables de les absorber.",
+  "Le problème de l'Europe n'est peut-être pas l'innovation, mais son financement.",
+  "L'IA modifie non seulement la productivité, mais aussi l'organisation des entreprises et la structure des marchés.",
+  "La capture du carbone est autant un problème de financement qu'un problème technique.",
+  "La destruction créatrice n'est pas automatique : elle requiert des institutions qui l'acceptent et des marchés qui la financent.",
+  "La souveraineté technologique européenne passera par la construction de marchés de capitaux profonds et liquides.",
+  "Comprendre Schumpeter et Rawls est une condition nécessaire pour penser la politique économique contemporaine.",
+];
+
+const TL_YEAR: Record<string, number> = {
+  math: 2021,
+  economics: 2023,
+  energy: 2024,
+  capital: 2025,
+  ai: 2025,
+  innovation: 2026,
+  industrial_policy: 2026,
+  europe: 2026,
+};
+
+interface NodeDef {
+  id: string;
+  label: string;
+  type: 'root' | 'l1' | 'l2';
+  parent?: string;
+}
+
+const NODE_DEFS: NodeDef[] = [
+  { id: 'root',             label: 'Transformation\nTechnologique',  type: 'root' },
+  { id: 'innovation',       label: 'Innovation',                     type: 'l1'   },
+  { id: 'ai',               label: 'Intelligence\nArtificielle',     type: 'l1'   },
+  { id: 'industrial_policy',label: 'Politique\nIndustrielle',        type: 'l1'   },
+  { id: 'capital',          label: 'Marchés de\nCapitaux',           type: 'l1'   },
+  { id: 'europe',           label: 'Europe',                         type: 'l1'   },
+  { id: 'energy',           label: 'Transition\nÉnergétique',        type: 'l1'   },
+  { id: 'economics',        label: 'Économie',                       type: 'l1'   },
+  { id: 'math',             label: 'Mathématiques',                  type: 'l1'   },
+  // Innovation
+  { id: 'schumpeter',       label: 'Schumpeter',                     type: 'l2', parent: 'innovation' },
+  { id: 'creative',         label: 'Destruction\ncréatrice',         type: 'l2', parent: 'innovation' },
+  { id: 'gpt_tech',         label: 'Technologies\ngénérales',        type: 'l2', parent: 'innovation' },
+  { id: 'diffusion',        label: 'Diffusion',                      type: 'l2', parent: 'innovation' },
+  { id: 'productivity',     label: 'Productivité',                   type: 'l2', parent: 'innovation' },
+  // AI
+  { id: 'dl',               label: 'Deep Learning',                  type: 'l2', parent: 'ai' },
+  { id: 'generalization',   label: 'Généralisation',                 type: 'l2', parent: 'ai' },
+  { id: 'foundation',       label: 'Modèles de\nfondation',          type: 'l2', parent: 'ai' },
+  { id: 'ai_econ',          label: 'IA & Économie',                  type: 'l2', parent: 'ai' },
+  { id: 'ai_health',        label: 'IA & Santé',                     type: 'l2', parent: 'ai' },
+  // Politique industrielle
+  { id: 'state_cap',        label: 'Capacité\nétatique',             type: 'l2', parent: 'industrial_policy' },
+  { id: 'regulation',       label: 'Régulation',                     type: 'l2', parent: 'industrial_policy' },
+  { id: 'defense_innov',    label: 'Innovation\nde défense',         type: 'l2', parent: 'industrial_policy' },
+  { id: 'strat_sectors',    label: 'Industries\nstratégiques',       type: 'l2', parent: 'industrial_policy' },
+  // Capitaux
+  { id: 'vc',               label: 'Capital-risque',                 type: 'l2', parent: 'capital' },
+  { id: 'pe',               label: 'Private Equity',                 type: 'l2', parent: 'capital' },
+  { id: 'pub_markets',      label: 'Marchés\npublics',               type: 'l2', parent: 'capital' },
+  { id: 'eu_markets',       label: 'Marchés\neuropéens',             type: 'l2', parent: 'capital' },
+  // Europe
+  { id: 'competitiveness',  label: 'Compétitivité',                  type: 'l2', parent: 'europe' },
+  { id: 'sovereignty',      label: 'Souveraineté',                   type: 'l2', parent: 'europe' },
+  { id: 'innov_gap',        label: "Retard\nd'innovation",           type: 'l2', parent: 'europe' },
+  // Énergie
+  { id: 'carbon',           label: 'Capture CO₂',                   type: 'l2', parent: 'energy' },
+  { id: 'elec_markets',     label: 'Marchés\nélectriques',           type: 'l2', parent: 'energy' },
+  { id: 'nuclear',          label: 'Nucléaire',                      type: 'l2', parent: 'energy' },
+  { id: 'green_finance',    label: 'Finance verte',                  type: 'l2', parent: 'energy' },
+  // Économie
+  { id: 'growth',           label: 'Théorie de\nla croissance',      type: 'l2', parent: 'economics' },
+  { id: 'dev_econ',         label: 'Économie du\ndéveloppement',     type: 'l2', parent: 'economics' },
+  { id: 'institutions',     label: 'Institutions',                   type: 'l2', parent: 'economics' },
+  { id: 'ind_org',          label: 'Org. industrielle',              type: 'l2', parent: 'economics' },
+  // Maths
+  { id: 'probability',      label: 'Probabilités',                   type: 'l2', parent: 'math' },
+  { id: 'optimization',     label: 'Optimisation',                   type: 'l2', parent: 'math' },
+  { id: 'geometry',         label: 'Géométrie',                      type: 'l2', parent: 'math' },
+  { id: 'stochastic',       label: 'Processus\nstochastiques',       type: 'l2', parent: 'math' },
+];
+
+interface LinkDef { source: string; target: string; dist?: number; w?: number; }
+const LINK_DEFS: LinkDef[] = [
+  // root → l1
+  ...(['innovation','ai','industrial_policy','capital','europe','energy','economics','math'] as string[])
+    .map(t => ({ source: 'root', target: t, dist: 190 })),
+  // l1 → l2 (auto)
+  ...NODE_DEFS.filter(n => n.parent).map(n => ({ source: n.parent!, target: n.id, dist: 88 })),
+  // cross-links
+  { source: 'math',       target: 'ai',          dist: 220, w: 0.15 },
+  { source: 'math',       target: 'economics',   dist: 240, w: 0.15 },
+  { source: 'ai',         target: 'innovation',  dist: 230, w: 0.15 },
+  { source: 'capital',    target: 'europe',      dist: 230, w: 0.12 },
+  { source: 'energy',     target: 'industrial_policy', dist: 220, w: 0.12 },
+  { source: 'economics',  target: 'innovation',  dist: 220, w: 0.12 },
+  { source: 'dev_econ',   target: 'ai_health',   dist: 180, w: 0.1  },
+  { source: 'eu_markets', target: 'innov_gap',   dist: 160, w: 0.1  },
+];
+
+const CONTENT: Record<string, { title: string; body?: string; books?: string[]; thinkers?: string[]; research?: string[]; questions?: string[] }> = {
+  root: {
+    title: 'Transformation Technologique',
+    body: "Le fil conducteur de mes intérêts intellectuels. Comment les sociétés adoptent les nouvelles technologies, quelles institutions facilitent ou freinent cette adoption, et comment l'épargne et les marchés de capitaux financent ces transformations sur le long terme.",
+  },
+  innovation: {
+    title: 'Innovation',
+    body: 'Comment les nouvelles technologies sont inventées, améliorées et diffusées au sein des économies.',
+    books: ['Joseph Schumpeter, Capitalism, Socialism and Democracy', 'Joel Mokyr, The Lever of Riches', 'Everett Rogers, Diffusion of Innovations'],
+  },
+  ai: {
+    title: 'Intelligence Artificielle',
+    body: "Comprendre les fondements techniques de l'IA et ses conséquences économiques, organisationnelles et sociales.",
+    books: ['Ian Goodfellow et al., Deep Learning', 'Agrawal, Gans & Goldfarb, Prediction Machines'],
+    research: ['Généralisation dépendante des données (INRIA Sierra)', 'Complexité géométrique des réseaux de neurones', 'Stabilité des algorithmes d\'apprentissage'],
+  },
+  industrial_policy: {
+    title: 'Politique Industrielle',
+    body: "Comment les États accélèrent ou freinent le changement technologique par la régulation, les marchés publics et les investissements stratégiques.",
+    books: ['Mariana Mazzucato, The Entrepreneurial State', 'Luc Soete, Innovation and Its Enemies'],
+    thinkers: ['Mariana Mazzucato', 'Alexander Hamilton', 'Jean Tirole', 'Dani Rodrik'],
+  },
+  capital: {
+    title: 'Marchés de Capitaux',
+    body: "Comment les sociétés mobilisent l'épargne pour financer l'innovation et les investissements de long terme nécessaires aux transformations technologiques.",
+    books: ['Charles Kindleberger, Manias, Panics and Crashes', 'Peter Bernstein, Against the Gods'],
+    questions: ["Pourquoi l'Europe peine-t-elle à financer l'innovation à grande échelle ?", "Quelles structures institutionnelles soutiennent la prise de risque à long terme ?"],
+  },
+  europe: {
+    title: 'Europe',
+    body: "L'avenir économique de l'Europe dans un monde façonné par l'IA, les transitions énergétiques et la fragmentation géopolitique.",
+    questions: ["L'Europe peut-elle rester technologiquement pertinente face aux États-Unis et à la Chine ?", "Comment construire des marchés de capitaux européens profonds et liquides ?", "Quelle politique industrielle pour une Europe souveraine ?"],
+  },
+  energy: {
+    title: 'Transition Énergétique',
+    body: "L'économie et le financement de la décarbonisation : viabilité économique, structures de financement et politiques publiques.",
+    books: ['David MacKay, Sustainable Energy Without the Hot Air'],
+    research: ['Économie des technologies de capture du carbone (TotalEnergies, 2024)'],
+  },
+  economics: {
+    title: 'Économie',
+    body: 'Théories expliquant la croissance, les institutions et le développement. Fondement de toute analyse des transformations technologiques et de l\'action publique.',
+    thinkers: ['Daron Acemoglu', 'Esther Duflo', 'Paul Romer', 'Friedrich Hayek', 'Kenneth Arrow', 'Jean Tirole'],
+  },
+  math: {
+    title: 'Mathématiques',
+    body: 'Le langage sous-jacent aux modèles, aux algorithmes et à l\'analyse économique rigoureuse.',
+  },
+};
+
+// ── SIMULATION STATE ─────────────────────────────────────────
+
+interface SimNode extends NodeDef {
+  x: number; y: number;
+  vx: number; vy: number;
+  fx?: number; fy?: number;
+}
+
+interface SimLink {
+  source: SimNode; target: SimNode;
+  dist: number; w: number;
+}
+
+const nodes: SimNode[] = NODE_DEFS.map(n => ({ ...n, x: 0, y: 0, vx: 0, vy: 0 }));
+const nodeById = new Map(nodes.map(n => [n.id, n]));
+
+const links: SimLink[] = LINK_DEFS.map(l => ({
+  source: nodeById.get(l.source)!,
+  target: nodeById.get(l.target)!,
+  dist: l.dist ?? 120,
+  w: l.w ?? 0.35,
+})).filter(l => l.source && l.target);
+
+// Adjacency set for isConnected check
+const adjSet = new Set(links.flatMap(l => [`${l.source.id}>${l.target.id}`, `${l.target.id}>${l.source.id}`]));
+const isConnected = (a: SimNode, b: SimNode) =>
+  adjSet.has(`${a.id}>${b.id}`) || adjSet.has(`${b.id}>${a.id}`);
+
+// Node visual config
+const NSTYLE: Record<string, { r: number; fill: string; lc: string; fs: number; fw: string }> = {
+  root: { r: 18,  fill: '#e8e8e8', lc: '#cccccc', fs: 12, fw: '600' },
+  l1:   { r: 9.5, fill: '#8a8a8a', lc: '#888888', fs: 9.5, fw: '500' },
+  l2:   { r: 4.5, fill: '#3a3a3a', lc: '#505050', fs: 8,   fw: '400' },
+};
+
+// ── CANVAS SETUP ─────────────────────────────────────────────
+
+const root   = document.getElementById('brain-root') as HTMLDivElement;
+const canvas = document.getElementById('brain-canvas') as HTMLCanvasElement;
+const ctx    = canvas.getContext('2d')!;
+
+let W = 0, H = 0, DPR = window.devicePixelRatio || 1;
+let panX = 0, panY = 0, zoom = 1;
+
+function resize() {
+  const header = document.querySelector('header') as HTMLElement;
+  const hh = header ? header.offsetHeight : 56;
+  W = window.innerWidth;
+  H = window.innerHeight - hh;
+  root.style.height = `${H}px`;
+  canvas.style.width = `${W}px`;
+  canvas.style.height = `${H}px`;
+  DPR = window.devicePixelRatio || 1;
+  canvas.width  = W * DPR;
+  canvas.height = H * DPR;
+  ctx.scale(DPR, DPR);
+  warm();
+}
+
+window.addEventListener('resize', resize, { passive: true });
+
+// ── INITIAL LAYOUT ───────────────────────────────────────────
+
+function initPositions() {
+  const l1 = nodes.filter(n => n.type === 'l1');
+  const cx = W / 2, cy = H / 2;
+  nodes.find(n => n.type === 'root')!.x = cx;
+  nodes.find(n => n.type === 'root')!.y = cy;
+  l1.forEach((n, i) => {
+    const a = (i / l1.length) * 2 * Math.PI - Math.PI / 2;
+    n.x = cx + Math.cos(a) * 190;
+    n.y = cy + Math.sin(a) * 190;
+  });
+  nodes.filter(n => n.type === 'l2').forEach((n, i, arr) => {
+    const parent = nodeById.get(n.parent!)!;
+    const siblings = arr.filter(s => s.parent === n.parent);
+    const si = siblings.indexOf(n);
+    const pa = Math.atan2(parent.y - cy, parent.x - cx);
+    const spread = 0.7;
+    const a = pa + (si - (siblings.length - 1) / 2) * spread;
+    n.x = parent.x + Math.cos(a) * 100;
+    n.y = parent.y + Math.sin(a) * 100;
+  });
+}
+
+// ── FORCE SIMULATION ─────────────────────────────────────────
+
+let alpha = 0;
+let rafId = 0;
+
+function nodeCharge(n: SimNode) {
+  if (n.type === 'root') return 800;
+  if (n.type === 'l1')   return 200;
+  return 60;
+}
+
+function tick() {
+  if (alpha < 0.001) return;
+  alpha *= 0.978;
+
+  // Spring forces (links)
+  for (const lk of links) {
+    const s = lk.source, t = lk.target;
+    const dx = t.x - s.x, dy = t.y - s.y;
+    const d = Math.sqrt(dx * dx + dy * dy) || 1;
+    const f = (d - lk.dist) / d * lk.w * alpha;
+    if (s.fx === undefined) { s.vx += dx * f; s.vy += dy * f; }
+    if (t.fx === undefined) { t.vx -= dx * f; t.vy -= dy * f; }
+  }
+
+  // Repulsion (many-body)
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const d2 = dx * dx + dy * dy || 0.01;
+      const str = (nodeCharge(a) + nodeCharge(b)) / d2 * alpha;
+      if (a.fx === undefined) { a.vx -= dx * str; a.vy -= dy * str; }
+      if (b.fx === undefined) { b.vx += dx * str; b.vy += dy * str; }
+    }
+  }
+
+  // Centering
+  let mcx = 0, mcy = 0;
+  nodes.forEach(n => { mcx += n.x; mcy += n.y; });
+  mcx /= nodes.length; mcy /= nodes.length;
+  const tcx = W / 2, tcy = H / 2;
+  nodes.forEach(n => {
+    if (n.fx === undefined) {
+      n.vx += (tcx - mcx) * 0.08 * alpha;
+      n.vy += (tcy - mcy) * 0.08 * alpha;
+    }
+  });
+
+  // Integrate
+  const MAX_V = 40;
+  nodes.forEach(n => {
+    if (n.fx !== undefined) { n.x = n.fx; n.y = n.fy!; return; }
+    n.vx = Math.max(-MAX_V, Math.min(MAX_V, n.vx * 0.72));
+    n.vy = Math.max(-MAX_V, Math.min(MAX_V, n.vy * 0.72));
+    n.x += n.vx;
+    n.y += n.vy;
+  });
+
+  draw();
+  rafId = requestAnimationFrame(tick);
+}
+
+function start() {
+  alpha = 1;
+  cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(tick);
+}
+
+function warm() {
+  if (alpha < 0.35) alpha = 0.35;
+  cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(tick);
+}
+
+// ── RENDERING ────────────────────────────────────────────────
+
+let hoveredNode: SimNode | null = null;
+let selectedNode: SimNode | null = null;
+let timelineMode = false;
+let timelineYear = 2027;
+
+function nodeVisible(n: SimNode): number {
+  if (!timelineMode) return 1;
+  const id = n.type === 'l2' ? (n.parent ?? n.id) : n.id;
+  const yr = TL_YEAR[id] ?? 2021;
+  return yr <= timelineYear ? 1 : 0.04;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0b0b0b';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.translate(panX, panY);
+  ctx.scale(zoom, zoom);
+
+  // Links
+  for (const lk of links) {
+    const s = lk.source, t = lk.target;
+    if (!s.x && !s.y && !t.x && !t.y) continue;
+    const vis = Math.min(nodeVisible(s), nodeVisible(t));
+    const isHL = selectedNode &&
+      (s === selectedNode || t === selectedNode ||
+       s.parent === selectedNode.id || t.parent === selectedNode.id);
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y);
+    ctx.lineTo(t.x, t.y);
+    ctx.strokeStyle = isHL
+      ? `rgba(180,180,180,${0.22 * vis})`
+      : `rgba(255,255,255,${0.05 * vis})`;
+    ctx.lineWidth = isHL ? 0.7 : 0.35;
+    ctx.stroke();
+  }
+
+  // Nodes
+  for (const n of nodes) {
+    const st = NSTYLE[n.type];
+    const vis = nodeVisible(n);
+    const isHov = n === hoveredNode;
+    const isSel = n === selectedNode;
+    const isCon = !!selectedNode && (n === selectedNode || isConnected(n, selectedNode));
+    const dimA = selectedNode ? (isCon ? vis : vis * 0.12) : vis;
+
+    ctx.save();
+    ctx.globalAlpha = dimA;
+
+    if (isHov || isSel) {
+      ctx.shadowBlur = isSel ? 28 : 14;
+      ctx.shadowColor = 'rgba(255,255,255,0.8)';
+    }
+
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, st.r + (isHov || isSel ? 1.5 : 0), 0, 2 * Math.PI);
+    ctx.fillStyle = isHov || isSel ? '#ffffff' : st.fill;
+    ctx.fill();
+    ctx.restore();
+
+    // Label
+    const lines = n.label.split('\n');
+    const lineH = st.fs + 2.5;
+    ctx.save();
+    ctx.globalAlpha = dimA * (isHov || isSel ? 1 : 0.75);
+    ctx.font = `${st.fw} ${st.fs}px Inter, system-ui, sans-serif`;
+    ctx.fillStyle = isHov || isSel ? '#ffffff' : st.lc;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    const labelY = n.y + st.r + 5;
+    lines.forEach((ln, i) => ctx.fillText(ln, n.x, labelY + i * lineH));
+    ctx.restore();
+  }
+
+  ctx.restore();
+}
+
+// ── HIT TEST ─────────────────────────────────────────────────
+
+function toGraph(sx: number, sy: number): [number, number] {
+  return [(sx - panX) / zoom, (sy - panY) / zoom];
+}
+
+function hitTest(gx: number, gy: number): SimNode | null {
+  let best: SimNode | null = null;
+  let bestD = Infinity;
+  for (const n of nodes) {
+    const dx = n.x - gx, dy = n.y - gy;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    const st = NSTYLE[n.type];
+    if (d < st.r + 10 && d < bestD) { best = n; bestD = d; }
+  }
+  return best;
+}
+
+// ── POINTER EVENTS ───────────────────────────────────────────
+
+let dragNode: SimNode | null = null;
+let pointerStartX = 0, pointerStartY = 0;
+let panStartX = 0, panStartY = 0;
+let isPanning = false;
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const f = e.deltaY < 0 ? 1.12 : 0.89;
+  const cx = e.offsetX, cy = e.offsetY;
+  panX = cx - (cx - panX) * f;
+  panY = cy - (cy - panY) * f;
+  zoom = Math.max(0.18, Math.min(5, zoom * f));
+  draw();
+}, { passive: false });
+
+canvas.addEventListener('mousedown', e => {
+  pointerStartX = e.offsetX;
+  pointerStartY = e.offsetY;
+  const [gx, gy] = toGraph(e.offsetX, e.offsetY);
+  dragNode = hitTest(gx, gy);
+  if (dragNode) {
+    dragNode.fx = dragNode.x;
+    dragNode.fy = dragNode.y;
+    warm();
+  } else {
+    isPanning = true;
+    panStartX = e.offsetX - panX;
+    panStartY = e.offsetY - panY;
+  }
+});
+
+window.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  if (dragNode) {
+    const [gx, gy] = toGraph(mx, my);
+    dragNode.fx = gx;
+    dragNode.fy = gy;
+  } else if (isPanning) {
+    panX = mx - panStartX;
+    panY = my - panStartY;
+    draw();
+    canvas.style.cursor = 'grabbing';
+  } else if (mx >= 0 && mx <= W && my >= 0 && my <= H) {
+    const [gx, gy] = toGraph(mx, my);
+    const node = hitTest(gx, gy);
+    if (node !== hoveredNode) {
+      hoveredNode = node;
+      canvas.style.cursor = node ? 'pointer' : 'grab';
+      draw();
+    }
+  }
+});
+
+window.addEventListener('mouseup', e => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const moved = Math.hypot(mx - pointerStartX, my - pointerStartY);
+
+  if (dragNode) {
+    if (moved < 6) {
+      selectedNode === dragNode ? deselect() : select(dragNode);
+    }
+    dragNode.fx = undefined;
+    dragNode.fy = undefined;
+    alpha = Math.max(alpha, 0.1);
+    dragNode = null;
+  } else if (isPanning) {
+    isPanning = false;
+    canvas.style.cursor = 'grab';
+    if (moved < 4 && selectedNode) deselect();
+  }
+});
+
+// Touch
+let touchStartX = 0, touchStartY = 0;
+let pinchDist = 0;
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  if (e.touches.length === 1) {
+    const t = e.touches[0];
+    const r = canvas.getBoundingClientRect();
+    touchStartX = t.clientX - r.left;
+    touchStartY = t.clientY - r.top;
+    pointerStartX = touchStartX;
+    pointerStartY = touchStartY;
+    const [gx, gy] = toGraph(touchStartX, touchStartY);
+    dragNode = hitTest(gx, gy);
+    if (dragNode) { dragNode.fx = dragNode.x; dragNode.fy = dragNode.y; warm(); }
+    else { isPanning = true; panStartX = touchStartX - panX; panStartY = touchStartY - panY; }
+  } else if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    pinchDist = Math.sqrt(dx*dx + dy*dy);
+    isPanning = false;
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 1) {
+    const t = e.touches[0];
+    const r = canvas.getBoundingClientRect();
+    const mx = t.clientX - r.left, my = t.clientY - r.top;
+    if (dragNode) {
+      const [gx, gy] = toGraph(mx, my);
+      dragNode.fx = gx; dragNode.fy = gy;
+    } else if (isPanning) {
+      panX = mx - panStartX; panY = my - panStartY; draw();
+    }
+  } else if (e.touches.length === 2 && pinchDist > 0) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    const f = d / pinchDist;
+    const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - canvas.getBoundingClientRect().left;
+    const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - canvas.getBoundingClientRect().top;
+    panX = cx - (cx - panX) * f;
+    panY = cy - (cy - panY) * f;
+    zoom = Math.max(0.18, Math.min(5, zoom * f));
+    pinchDist = d;
+    draw();
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  e.preventDefault();
+  const t = e.changedTouches[0];
+  const r = canvas.getBoundingClientRect();
+  const mx = t.clientX - r.left, my = t.clientY - r.top;
+  const moved = Math.hypot(mx - pointerStartX, my - pointerStartY);
+  if (dragNode) {
+    if (moved < 10) selectedNode === dragNode ? deselect() : select(dragNode);
+    dragNode.fx = undefined; dragNode.fy = undefined;
+    dragNode = null;
+  } else { isPanning = false; if (moved < 6 && selectedNode) deselect(); }
+  pinchDist = 0;
+}, { passive: false });
+
+// ── PANEL ────────────────────────────────────────────────────
+
+const panel     = document.getElementById('side-panel')!;
+const pTitle    = document.getElementById('panel-title')!;
+const pBody     = document.getElementById('panel-body')!;
+const pClose    = document.getElementById('panel-close')!;
+
+pClose.addEventListener('click', deselect);
+
+function select(n: SimNode) {
+  selectedNode = n;
+  const c = CONTENT[n.id];
+  pTitle.textContent = c?.title ?? n.label.replace(/\n/g,' ');
+  let html = '';
+  if (c?.body) html += `<p class="desc">${c.body}</p>`;
+  if (c?.books?.length)     html += `<span class="cat">Lectures</span><ul>${c.books.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  if (c?.thinkers?.length)  html += `<span class="cat">Penseurs</span><ul>${c.thinkers.map(t=>`<li>${t}</li>`).join('')}</ul>`;
+  if (c?.research?.length)  html += `<span class="cat">Recherche</span><ul>${c.research.map(r=>`<li>${r}</li>`).join('')}</ul>`;
+  if (c?.questions?.length) html += `<span class="cat">Questions ouvertes</span><ul>${c.questions.map(q=>`<li>${q}</li>`).join('')}</ul>`;
+  if (!c) html = `<p class="desc">Sous-thème de <em>${n.parent ?? ''}</em>.</p>`;
+  pBody.innerHTML = html;
+  panel.classList.add('open');
+  panel.setAttribute('aria-hidden','false');
+  draw();
+}
+
+function deselect() {
+  selectedNode = null;
+  panel.classList.remove('open');
+  panel.setAttribute('aria-hidden','true');
+  draw();
+}
+
+// ── RANDOM THOUGHT ───────────────────────────────────────────
+
+const thoughtBox  = document.getElementById('thought-box')!;
+const thoughtText = document.getElementById('thought-text')!;
+let thoughtTimer = 0;
+
+document.getElementById('btn-thought')!.addEventListener('click', () => {
+  const t = THOUGHTS[Math.floor(Math.random() * THOUGHTS.length)];
+  thoughtText.textContent = `« ${t} »`;
+  thoughtBox.hidden = false;
+  clearTimeout(thoughtTimer);
+  thoughtTimer = window.setTimeout(() => { thoughtBox.hidden = true; }, 6000);
+});
+thoughtBox.addEventListener('click', () => { thoughtBox.hidden = true; clearTimeout(thoughtTimer); });
+
+// ── TIMELINE ─────────────────────────────────────────────────
+
+const btnTL   = document.getElementById('btn-timeline')!;
+const tlBar   = document.getElementById('timeline-bar')!;
+const tlSlide = document.getElementById('tl-slider') as HTMLInputElement;
+const tlYear  = document.getElementById('tl-year')!;
+
+btnTL.addEventListener('click', () => {
+  timelineMode = !timelineMode;
+  tlBar.hidden = !timelineMode;
+  btnTL.classList.toggle('active', timelineMode);
+  draw();
+});
+
+tlSlide.addEventListener('input', () => {
+  timelineYear = parseInt(tlSlide.value);
+  tlYear.textContent = timelineYear >= 2027 ? '2026+' : String(timelineYear);
+  draw();
+});
+
+// ── BOOT ─────────────────────────────────────────────────────
+
+resize();
+initPositions();
+start();
+
+</script>
