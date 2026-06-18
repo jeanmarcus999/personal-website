@@ -140,6 +140,23 @@
     }
   }
 
+  /* ── Entrée CV (format narration longue) ───────────── */
+  .cv-entry {
+    padding: 1.7rem 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .cv-entry:first-child {
+    border-top: 1px solid var(--color-rule);
+  }
+
+  /* ── Texte justifié avec césure ─────────────────────── */
+  .prose-justified {
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphenate-limit-chars: 6 3 3;
+  }
+
   /* ── Meta (date, durée) ─────────────────────────────── */
   .meta {
     font-family: "Inter Variable", system-ui, sans-serif;

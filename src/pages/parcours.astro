@@ -3,58 +3,83 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const formation = [
   {
-    years: '2027 à 2028',
-    title: 'Stanford University',
-    sub:   'Master of Science in Management Science and Engineering',
-    desc:  "Année internationale dans le cadre de la deuxième année du Corps des Mines.",
+    institution: 'Corps des Mines',
+    years:       '2026 à 2029',
+    body: `Je rejoins le Corps des Mines en 2026. Cette formation me permet d'approfondir
+      mon intérêt pour les transformations technologiques de long terme, à l'intersection
+      de l'ingénierie, de l'économie et de l'action publique. Je m'intéresse
+      particulièrement aux conditions dans lesquelles les innovations sont adoptées à
+      grande échelle : financement, organisation des marchés et politiques publiques.`,
   },
   {
-    years: '2026 à 2029',
-    title: 'Corps des Mines',
-    sub:   'Mines Paris, PSL',
-    desc:  "Formation à l'interface de l'ingénierie, de l'administration et de l'économie industrielle. Recruté parmi les dix premiers du classement de sortie de l'École polytechnique.",
+    institution: 'Stanford University',
+    years:       '2027 à 2028',
+    sub:         'Master in Management Science and Engineering',
+    body: `Dans le cadre de mon année internationale au Corps des Mines, je rejoindrai
+      Stanford pour un Master in Management Science and Engineering. J'y poursuivrai
+      mes travaux sur l'économie de l'innovation, les marchés de capitaux et les
+      transformations technologiques.`,
   },
   {
-    years: '2023 à 2026',
-    title: 'École polytechnique',
-    sub:   'Cycle ingénieur, Paris-Saclay',
-    desc:  "Double majeure mathématiques appliquées et économie. Septième sur 555 étudiants.",
+    institution: 'École polytechnique',
+    years:       '2023 à 2026',
+    sub:         'Cycle ingénieur, mathématiques appliquées et économie',
+    body: `À l'École polytechnique, j'ai étudié les mathématiques appliquées et
+      l'économie. Cette double formation m'a conduit à m'intéresser aussi bien aux
+      fondements mathématiques de l'apprentissage automatique qu'aux questions de
+      financement, d'organisation industrielle et de croissance économique.`,
   },
   {
-    years: '2021 à 2023',
-    title: 'Lycée Sainte-Geneviève',
-    sub:   'Classes préparatoires MP, Versailles',
-    desc:  "Reçu premier au concours de l'École polytechnique. Également admis à l'École normale supérieure et à CentraleSupélec.",
+    institution: 'Lycée Sainte-Geneviève',
+    years:       '2021 à 2023',
+    sub:         'Classes préparatoires scientifiques (MP)',
+    body: `J'y ai développé un goût durable pour les mathématiques et pour les
+      problèmes théoriques exigeants.`,
   },
 ];
 
 const experience = [
   {
-    years: '2026',
-    title: 'MIT, Department of Economics',
-    sub:   'Assistant de recherche',
-    desc:  "Travaux sous la direction d'Esther Duflo. Application de méthodes d'apprentissage automatique à des cadres d'inférence causale, conception de solutions de microcrédit et d'assurance, évaluation de technologies d'intelligence artificielle en santé.",
+    institution: 'MIT, Department of Economics',
+    years:       '2026',
+    sub:         "Au sein du laboratoire d'Esther Duflo",
+    body: `Je travaille sur des sujets situés à l'intersection de l'économie du
+      développement et de l'intelligence artificielle. Mes recherches portent notamment
+      sur l'utilisation de méthodes d'apprentissage automatique dans des cadres
+      d'inférence causale, sur la conception de mécanismes de microcrédit et d'assurance,
+      ainsi que sur l'évaluation de technologies d'intelligence artificielle appliquées
+      à la santé.`,
   },
   {
-    years: '2025',
-    title: 'Centerview Partners',
-    sub:   'Analyste, fusions et acquisitions, Paris',
-    desc:  "Études sectorielles fintech, modélisation financière, transaction de quatre milliards de dollars dans le luxe, levée de fonds pour une startup en intelligence artificielle.",
+    institution: 'Centerview Partners',
+    years:       '2025',
+    sub:         'Fusions-acquisitions, Paris',
+    body: `J'ai participé à des opérations de fusion-acquisition et de levée de fonds
+      dans différents secteurs, notamment la fintech, le luxe et l'intelligence
+      artificielle. Cette expérience m'a permis d'observer concrètement comment les
+      entreprises financent leur croissance, allouent leur capital et adoptent de
+      nouvelles technologies.`,
   },
 ];
 
 const recherche = [
   {
-    years: '2025 à 2026',
-    title: 'INRIA Sierra',
-    sub:   "Sous la direction d'Umut Şimşekli",
-    desc:  "Bornes de généralisation dépendantes des données en apprentissage profond. Mesures géométriques de complexité, stabilité algorithmique.",
+    institution: 'INRIA Sierra',
+    years:       '2025 à 2026',
+    sub:         "Sous la direction d'Umut Şimşekli",
+    body: `J'ai travaillé sur des questions théoriques en apprentissage profond. Mes
+      recherches portent sur les bornes de généralisation dépendantes des données et sur
+      les propriétés géométriques permettant de mieux comprendre pourquoi les modèles
+      modernes apprennent et généralisent efficacement.`,
   },
   {
-    years: '2024 à 2025',
-    title: 'TotalEnergies',
-    sub:   'Sous la direction de Thomas Olivier Léautier',
-    desc:  "Économie de la capture du carbone. Modèles technologiques, stratégies de financement, politiques publiques de déploiement.",
+    institution: 'TotalEnergies',
+    years:       '2024 à 2025',
+    sub:         'Sous la direction de Thomas-Olivier Léautier',
+    body: `J'ai étudié l'économie des technologies de capture du carbone : leur viabilité
+      économique, leurs stratégies de financement et les politiques publiques susceptibles
+      d'en favoriser le déploiement. Cette expérience a renforcé mon intérêt pour les
+      mécanismes permettant de financer les transformations technologiques de long terme.`,
   },
 ];
 ---
@@ -67,65 +92,74 @@ const recherche = [
 
     <h1 class="page-title">Parcours</h1>
 
-    <div class="prose-body font-serif text-[1rem] sm:text-[1.05rem] leading-[1.8] text-ink mb-12 sm:mb-16">
-      <p>
-        [Paragraphe biographique à écrire par Jean. Deux à trois phrases reliant formation et sujet intellectuel.]
-      </p>
-    </div>
-
+    <!-- Formation -->
     <section class="mb-12 sm:mb-14">
       <span class="section-label">Formation</span>
-      <div>
-        {formation.map(e => (
-          <div class="parcours-row">
-            <span class="meta">{e.years}</span>
-            <div>
-              <p class="font-serif text-[1rem] sm:text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
-              <p class="meta mb-1">{e.sub}</p>
-              <p class="font-serif text-[0.9rem] sm:text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
-            </div>
+      {formation.map(e => (
+        <div class="cv-entry">
+          <div class="flex items-baseline justify-between flex-wrap gap-x-4 gap-y-0 mb-1">
+            <h2 class="font-serif text-[1.05rem] font-medium text-ink m-0 leading-snug">
+              {e.institution}
+            </h2>
+            <span class="meta flex-shrink-0">{e.years}</span>
           </div>
-        ))}
-      </div>
+          {e.sub && (
+            <p class="meta mb-2">{e.sub}</p>
+          )}
+          <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
+            {e.body}
+          </p>
+        </div>
+      ))}
     </section>
 
+    <!-- Expériences -->
     <section class="mb-12 sm:mb-14">
-      <span class="section-label">Expérience</span>
-      <div>
-        {experience.map(e => (
-          <div class="parcours-row">
-            <span class="meta">{e.years}</span>
-            <div>
-              <p class="font-serif text-[1rem] sm:text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
-              <p class="meta mb-1">{e.sub}</p>
-              <p class="font-serif text-[0.9rem] sm:text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
-            </div>
+      <span class="section-label">Expériences</span>
+      {experience.map(e => (
+        <div class="cv-entry">
+          <div class="flex items-baseline justify-between flex-wrap gap-x-4 gap-y-0 mb-1">
+            <h2 class="font-serif text-[1.05rem] font-medium text-ink m-0 leading-snug">
+              {e.institution}
+            </h2>
+            <span class="meta flex-shrink-0">{e.years}</span>
           </div>
-        ))}
-      </div>
+          {e.sub && (
+            <p class="meta mb-2">{e.sub}</p>
+          )}
+          <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
+            {e.body}
+          </p>
+        </div>
+      ))}
     </section>
 
+    <!-- Recherche -->
     <section class="mb-12 sm:mb-14">
-      <span class="section-label">Travaux de recherche</span>
-      <div>
-        {recherche.map(e => (
-          <div class="parcours-row">
-            <span class="meta">{e.years}</span>
-            <div>
-              <p class="font-serif text-[1rem] sm:text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
-              <p class="meta mb-1">{e.sub}</p>
-              <p class="font-serif text-[0.9rem] sm:text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
-            </div>
+      <span class="section-label">Recherche</span>
+      {recherche.map(e => (
+        <div class="cv-entry">
+          <div class="flex items-baseline justify-between flex-wrap gap-x-4 gap-y-0 mb-1">
+            <h2 class="font-serif text-[1.05rem] font-medium text-ink m-0 leading-snug">
+              {e.institution}
+            </h2>
+            <span class="meta flex-shrink-0">{e.years}</span>
           </div>
-        ))}
-      </div>
+          {e.sub && (
+            <p class="meta mb-2">{e.sub}</p>
+          )}
+          <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
+            {e.body}
+          </p>
+        </div>
+      ))}
     </section>
 
+    <!-- Centres d'intérêt -->
     <section class="mb-14 sm:mb-16">
       <span class="section-label">Centres d'intérêt</span>
-      <div class="parcours-row">
-        <span class="meta"></span>
-        <p class="font-serif text-[1rem] text-ink leading-relaxed mt-0 mb-0">
+      <div class="cv-entry">
+        <p class="font-serif text-[0.95rem] text-ink leading-[1.75] prose-justified mt-0 mb-0">
           Littérature française du XIXe siècle. Droit, en particulier ses intersections
           avec l'économie industrielle. Handball, en compétition dans l'équipe de
           l'École polytechnique. Tennis.
@@ -133,8 +167,13 @@ const recherche = [
       </div>
     </section>
 
-    <div class="mb-6">
-      <a href="/cv.pdf" download class="meta" style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">
+    <div class="mb-8">
+      <a
+        href="/cv.pdf"
+        download
+        class="meta"
+        style="color:#1F3A5F;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+      >
         Télécharger le CV en PDF →
       </a>
     </div>
