@@ -494,9 +494,9 @@ const isConnected = (a: SimNode, b: SimNode) =>
 
 // Node visual config
 const NSTYLE: Record<string, { r: number; fill: string; lc: string; fs: number; fw: string }> = {
-  root: { r: 18,  fill: '#f0f0f0', lc: '#e0e0e0', fs: 12, fw: '600' },
-  l1:   { r: 9.5, fill: '#c0c0c0', lc: '#c8c8c8', fs: 10, fw: '500' },
-  l2:   { r: 5,   fill: '#787878', lc: '#aaaaaa', fs: 8.5, fw: '400' },
+  root: { r: 18,  fill: '#f0f0f0', lc: '#ffffff', fs: 13, fw: '700' },
+  l1:   { r: 9.5, fill: '#c0c0c0', lc: '#f0f0f0', fs: 11, fw: '600' },
+  l2:   { r: 5,   fill: '#909090', lc: '#d8d8d8', fs: 10, fw: '500' },
 };
 
 // ── CANVAS SETUP ─────────────────────────────────────────────
@@ -692,7 +692,7 @@ function draw() {
     const lines = n.label.split('\n');
     const lineH = st.fs + 2.5;
     ctx.save();
-    ctx.globalAlpha = dimA * (isHov || isSel ? 1 : 0.75);
+    ctx.globalAlpha = dimA * (isHov || isSel ? 1 : 0.92);
     ctx.font = `${st.fw} ${st.fs}px Inter, system-ui, sans-serif`;
     ctx.fillStyle = isHov || isSel ? '#ffffff' : st.lc;
     ctx.textAlign = 'center';
