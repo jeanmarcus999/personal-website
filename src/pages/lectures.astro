@@ -1,10 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const months: Array<{
-  label: string;
-  entries: Array<{ author: string; title: string; year: number; note: string }>;
-}> = [
+interface Book {
+  author: string;
+  title:  string;
+  year:   number;
+  isbn:   string;
+  note:   string;
+}
+
+const months: Array<{ label: string; entries: Book[] }> = [
   {
     label: 'Juin 2026',
     entries: [
@@ -12,12 +17,21 @@ const months: Array<{
         author: 'Robert Greene',
         title:  'Mastery',
         year:   2012,
+        isbn:   '0670024961',
         note:   "Une étude des trajectoires d'excellence dans des domaines très différents, de Léonard de Vinci à Darwin en passant par John Coltrane. Greene identifie les patterns communs : apprentissage long, immersion totale, rejet des raccourcis. Utile pour penser la formation intellectuelle sur le long terme.",
       },
       {
+        author: 'Graham Allison',
+        title:  'Destined for War',
+        year:   2017,
+        isbn:   '0544935276',
+        note:   "Allison formalise le « piège de Thucydide » : lorsqu'une puissance montante menace d'en supplanter une établie, la guerre devient probable. Il examine seize cas historiques depuis cinq siècles et analyse la rivalité sino-américaine à cette aune. Un cadre d'analyse structurant pour penser les tensions géopolitiques actuelles.",
+      },
+      {
         author: 'Samuel Huntington',
-        title:  'The Clash of Civilizations and the Remaking of World Order',
+        title:  'The Clash of Civilizations',
         year:   1996,
+        isbn:   '0684844419',
         note:   "L'hypothèse que les conflits post-guerre froide seront structurés par les lignes de fracture culturelles et civilisationnelles plutôt qu'idéologiques. Contesté mais indispensable : difficile de penser la géopolitique contemporaine sans avoir lu et discuté Huntington.",
       },
     ],
@@ -29,6 +43,7 @@ const months: Array<{
         author: 'Malcolm Gladwell',
         title:  'Outliers',
         year:   2008,
+        isbn:   '0316017922',
         note:   "Gladwell déconstruit le mythe du génie solitaire et démontre que la réussite exceptionnelle dépend davantage des opportunités structurelles, du contexte familial et du moment de naissance que du seul talent individuel. La règle des 10 000 heures reste discutable, mais le cadre général est stimulant.",
       },
     ],
@@ -40,17 +55,22 @@ const months: Array<{
         author: 'John Rawls',
         title:  'A Theory of Justice',
         year:   1971,
-        note:   "Le texte fondateur du libéralisme politique contemporain. Rawls reconstruit les principes de justice à partir de l'expérience de pensée du voile d'ignorance : quelles règles choisirions-nous si nous ignorions la place que nous occuperions dans la société ? Un cadre de référence incontournable pour toute réflexion sur la redistribution et l'action publique.",
+        isbn:   '0674000781',
+        note:   "Le texte fondateur du libéralisme politique contemporain. Rawls reconstruit les principes de justice à partir du voile d'ignorance : quelles règles choisirions-nous si nous ignorions la place que nous occuperions dans la société ? Un cadre de référence incontournable pour toute réflexion sur la redistribution et l'action publique.",
       },
       {
         author: 'Robert Nozick',
         title:  'Anarchy, State, and Utopia',
         year:   1974,
+        isbn:   '0465051006',
         note:   "La réponse libertarienne à Rawls, publiée trois ans après. Nozick défend l'État minimal et l'inviolabilité des droits individuels contre toute redistribution forcée, même au nom de la justice. À lire avec Rawls : les deux livres se répondent et délimitent un espace de débat encore actif.",
       },
     ],
   },
 ];
+
+const coverUrl = (isbn: string) =>
+  `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
 ---
 
 <BaseLayout
@@ -62,31 +82,49 @@ const months: Array<{
     <p class="font-serif text-[0.95rem] sm:text-[1rem] text-muted leading-relaxed mb-12 sm:mb-14">
       Une sélection mensuelle de livres que je recommande. Mise à jour chaque mois.
     </p>
+
     {months.map(month => (
-      <section class="mb-10">
+      <section class="mb-12 sm:mb-14">
         <span class="section-label">{month.label}</span>
-        {month.entries.length === 0 ? (
-          <div class="parcours-row">
-            <span class="meta"></span>
-            <p class="font-serif text-[0.95rem] text-muted italic mt-0 mb-0">À compléter.</p>
-          </div>
-        ) : (
-          <div>
-            {month.entries.map(e => (
-              <div class="parcours-row">
-                <span class="meta">{e.year}</span>
-                <div>
-                  <p class="font-serif text-[1rem] sm:text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">
-                    {e.author}, <em>{e.title}</em>
-                  </p>
-                  <p class="font-serif text-[0.9rem] sm:text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">
-                    {e.note}
-                  </p>
-                </div>
+
+        <div style="border-top:1px solid var(--color-rule)">
+          {month.entries.map(book => (
+            <div
+              class="flex gap-5 sm:gap-6 py-5 sm:py-6"
+              style="border-bottom:1px solid var(--color-rule)"
+            >
+              <!-- Couverture -->
+              <div class="flex-shrink-0" style="width:68px">
+                <img
+                  src={coverUrl(book.isbn)}
+                  alt={`Couverture — ${book.title}`}
+                  width="68"
+                  height="102"
+                  loading="lazy"
+                  decoding="async"
+                  style="width:68px;height:102px;object-fit:cover;display:block;background-color:var(--color-rule)"
+                  onerror="this.style.opacity='0'"
+                />
               </div>
-            ))}
-          </div>
-        )}
+
+              <!-- Texte -->
+              <div class="flex flex-col justify-start min-w-0 pt-[2px]">
+                <p class="font-sans text-[0.68rem] tracking-[0.05em] text-muted uppercase mb-1 mt-0">
+                  {book.year}
+                </p>
+                <p class="font-serif text-[1rem] sm:text-[1.02rem] font-semibold text-ink leading-snug mb-0 mt-0">
+                  {book.author}
+                </p>
+                <p class="font-serif italic text-[0.95rem] sm:text-[0.98rem] text-ink leading-snug mb-3 mt-[2px]">
+                  {book.title}
+                </p>
+                <p class="font-serif text-[0.88rem] sm:text-[0.91rem] text-muted leading-[1.72] prose-justified mt-0 mb-0">
+                  {book.note}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
     ))}
   </div>
