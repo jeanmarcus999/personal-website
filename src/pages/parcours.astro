@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const formation = [
+const formation: Entry[] = [
   {
     institution: 'Corps des Mines',
     years:       '2026 à 2029',
@@ -39,11 +39,20 @@ const formation = [
   },
 ];
 
-const experience = [
+interface Entry {
+  institution: string;
+  years:       string;
+  sub?:        string;
+  subUrl?:     string;
+  body:        string;
+}
+
+const experience: Entry[] = [
   {
     institution: 'MIT, Department of Economics',
     years:       '2026',
-    sub:         "Au sein du laboratoire d'Esther Duflo",
+    sub:         "Projet de recherche sous la direction d'Esther Duflo",
+    subUrl:      'https://economics.mit.edu/faculty/eduflo',
     body: `Je travaille sur des sujets situés à l'intersection de l'économie du
       développement et de l'intelligence artificielle. Mes recherches portent notamment
       sur l'utilisation de méthodes d'apprentissage automatique dans des cadres
@@ -63,11 +72,12 @@ const experience = [
   },
 ];
 
-const recherche = [
+const recherche: Entry[] = [
   {
     institution: 'INRIA Sierra',
     years:       '2025 à 2026',
-    sub:         "Sous la direction d'Umut Şimşekli",
+    sub:         "Projet de recherche sous la direction d'Umut Şimşekli",
+    subUrl:      'https://www.di.ens.fr/~simsekli/',
     body: `J'ai travaillé sur des questions théoriques en apprentissage profond. Mes
       recherches portent sur les bornes de généralisation dépendantes des données et sur
       les propriétés géométriques permettant de mieux comprendre pourquoi les modèles
@@ -76,7 +86,7 @@ const recherche = [
   {
     institution: 'TotalEnergies',
     years:       '2024 à 2025',
-    sub:         'Sous la direction de Thomas-Olivier Léautier',
+    sub:         'Projet de recherche sous la direction de Thomas-Olivier Léautier',
     body: `J'ai étudié l'économie des technologies de capture du carbone : leur viabilité
       économique, leurs stratégies de financement et les politiques publiques susceptibles
       d'en favoriser le déploiement. Cette expérience a renforcé mon intérêt pour les
@@ -105,7 +115,12 @@ const recherche = [
             <span class="meta flex-shrink-0">{e.years}</span>
           </div>
           {e.sub && (
-            <p class="meta mb-2">{e.sub}</p>
+            <p class="meta mb-2">
+              {e.subUrl
+                ? <a href={e.subUrl} target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">{e.sub}</a>
+                : e.sub
+              }
+            </p>
           )}
           <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
             {e.body}
@@ -126,7 +141,12 @@ const recherche = [
             <span class="meta flex-shrink-0">{e.years}</span>
           </div>
           {e.sub && (
-            <p class="meta mb-2">{e.sub}</p>
+            <p class="meta mb-2">
+              {e.subUrl
+                ? <a href={e.subUrl} target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">{e.sub}</a>
+                : e.sub
+              }
+            </p>
           )}
           <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
             {e.body}
@@ -147,7 +167,12 @@ const recherche = [
             <span class="meta flex-shrink-0">{e.years}</span>
           </div>
           {e.sub && (
-            <p class="meta mb-2">{e.sub}</p>
+            <p class="meta mb-2">
+              {e.subUrl
+                ? <a href={e.subUrl} target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">{e.sub}</a>
+                : e.sub
+              }
+            </p>
           )}
           <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
             {e.body}
