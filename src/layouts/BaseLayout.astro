@@ -37,7 +37,7 @@ const personSchema = JSON.stringify({
 // 1. Crée un compte sur https://umami.is (gratuit, 10k vues/mois)
 // 2. Ajoute ton site, copie le "Website ID"
 // 3. Remplace '' ci-dessous par ton ID (format UUID)
-const UMAMI_ID = '';
+const UMAMI_ID = 'd242e2d3-2eab-48d4-a09f-af500f2a0252';
 // ───────────────────────────────────────────────────────────────────────────
 ---
 
@@ -91,7 +91,7 @@ const UMAMI_ID = '';
       >
         var s = document.createElement('script');
         s.defer = true;
-        s.src = 'https://analytics.umami.is/script.js';
+        s.src = 'https://cloud.umami.is/script.js';
         s.setAttribute('data-website-id', UMAMI_ID);
         document.head.appendChild(s);
       </script>

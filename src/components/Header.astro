@@ -2,10 +2,11 @@
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const nav = [
-  { href: `${base}/`,         label: 'Accueil'  },
-  { href: `${base}/parcours`, label: 'Parcours' },
-  { href: `${base}/ecrits`,   label: 'Écrits'   },
-  { href: `${base}/contact`,  label: 'Contact'  },
+  { href: `${base}/`,          label: 'Accueil'  },
+  { href: `${base}/parcours`,  label: 'Parcours' },
+  { href: `${base}/ecrits`,    label: 'Écrits'   },
+  { href: `${base}/lectures`,  label: 'Lectures' },
+  { href: `${base}/contact`,   label: 'Contact'  },
 ];
 
 const path = new URL(Astro.request.url).pathname;

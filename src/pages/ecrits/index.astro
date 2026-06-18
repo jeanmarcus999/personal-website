@@ -5,28 +5,48 @@ import PostCard from '../../components/PostCard.astro';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const sorted = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Grouper par année
+const byYear = sorted.reduce<Record<number, typeof sorted>>((acc, post) => {
+  const year = post.data.pubDate.getFullYear();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {});
+
+const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
 ---
 
 <BaseLayout
   title="Écrits"
-  description="Notes de Jean Marcus sur le financement et le déploiement de l'IA en Europe."
+  description="Notes sur le financement et le déploiement des technologies stratégiques en Europe."
 >
   <div class="page-wrapper">
 
-    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-16 md:pt-24">
+    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-6 md:pt-24">
       Écrits
     </h1>
 
-    <div>
-      {sorted.map(post => (
-        <PostCard
-          title={post.data.title}
-          description={post.data.description}
-          pubDate={post.data.pubDate}
-          slug={post.id}
-        />
-      ))}
-    </div>
+    <p class="font-serif text-[1rem] text-muted leading-relaxed mb-14 max-w-reading">
+      Notes sur le financement et le déploiement des technologies stratégiques en Europe.
+      Format libre, longueur variable.
+    </p>
+
+    {years.map(year => (
+      <section class="mb-12">
+        <span class="section-label">{year}</span>
+        <div>
+          {byYear[year].map(post => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              slug={post.id}
+            />
+          ))}
+        </div>
+      </section>
+    ))}
 
   </div>
 </BaseLayout>

@@ -3,35 +3,77 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const formation = [
   {
-    years: '2022 – 2026',
-    title: 'École Polytechnique',
-    sub:   'Cycle ingénieur, Paris-Saclay',
-    desc:  'Formation scientifique et technologique. Majeure en économie et sciences des données.',
+    years: '2027 à 2028',
+    title: 'Stanford University',
+    sub:   'Master of Science in Management Science and Engineering',
+    desc:  "Année internationale dans le cadre de la deuxième année du Corps des Mines.",
   },
   {
-    years: '2025 – 2026',
-    title: 'MIT, Department of Economics',
-    sub:   'Internat de recherche, Cambridge MA',
-    desc:  "Recherche en économie du développement sous la direction d'Esther Duflo. Focus sur les effets de l'investissement technologique dans les économies émergentes.",
-  },
-  {
-    years: 'Sept. 2026',
+    years: '2026 à 2029',
     title: 'Corps des Mines',
     sub:   'Mines Paris, PSL',
-    desc:  "Formation à l'interface de l'ingénierie, de l'administration et de l'économie industrielle.",
+    desc:  "Formation à l'interface de l'ingénierie, de l'administration et de l'économie industrielle. Recruté parmi les dix premiers du classement de sortie de l'École polytechnique.",
+  },
+  {
+    years: '2023 à 2026',
+    title: 'École polytechnique',
+    sub:   'Cycle ingénieur, Paris-Saclay',
+    desc:  "Double majeure mathématiques appliquées et économie. Septième sur 555 étudiants.",
+  },
+  {
+    years: '2021 à 2023',
+    title: 'Lycée Sainte-Geneviève',
+    sub:   'Classes préparatoires MP, Versailles',
+    desc:  "Reçu premier au concours de l'École polytechnique. Également admis à l'École normale supérieure et à CentraleSupélec.",
+  },
+];
+
+const experience = [
+  {
+    years: '2026',
+    title: 'MIT, Department of Economics',
+    sub:   'Assistant de recherche',
+    desc:  "Travaux sous la direction d'Esther Duflo. Application de méthodes d'apprentissage automatique à des cadres d'inférence causale, conception de solutions de microcrédit et d'assurance, évaluation de technologies d'intelligence artificielle en santé.",
+  },
+  {
+    years: '2025',
+    title: 'Centerview Partners',
+    sub:   'Analyste, fusions et acquisitions, Paris',
+    desc:  "Études sectorielles fintech, modélisation financière, transaction de quatre milliards de dollars dans le luxe, levée de fonds pour une startup en intelligence artificielle.",
+  },
+];
+
+const recherche = [
+  {
+    years: '2025 à 2026',
+    title: 'INRIA Sierra',
+    sub:   'Sous la direction d\'Umut Şimşekli',
+    desc:  "Bornes de généralisation dépendantes des données en apprentissage profond. Mesures géométriques de complexité, stabilité algorithmique.",
+  },
+  {
+    years: '2024 à 2025',
+    title: 'TotalEnergies',
+    sub:   'Sous la direction de Thomas Olivier Léautier',
+    desc:  "Économie de la capture du carbone. Modèles technologiques, stratégies de financement, politiques publiques de déploiement.",
   },
 ];
 ---
 
 <BaseLayout
   title="Parcours"
-  description="Parcours de Jean Marcus : École Polytechnique, MIT, Corps des Mines."
+  description="Parcours de Jean Marcus : École polytechnique, MIT, Corps des Mines, Stanford."
 >
   <div class="page-wrapper">
 
-    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-16 md:pt-24">
+    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-10 md:pt-24">
       Parcours
     </h1>
+
+    <div class="prose-body font-serif text-[1.05rem] leading-[1.8] text-ink mb-16 max-w-reading">
+      <p>
+        [Paragraphe biographique à écrire par Jean. Deux à trois phrases reliant formation et sujet intellectuel.]
+      </p>
+    </div>
 
     <!-- Formation -->
     <section class="mb-14">
@@ -39,7 +81,7 @@ const formation = [
       <div>
         {formation.map(e => (
           <div class="parcours-row">
-            <span class="meta pt-[0.2rem]">{e.years}</span>
+            <span class="meta pt-[0.15rem]">{e.years}</span>
             <div>
               <p class="font-serif text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
               <p class="meta mb-1">{e.sub}</p>
@@ -50,21 +92,50 @@ const formation = [
       </div>
     </section>
 
-    <!-- Recherche et expériences -->
+    <!-- Expérience -->
     <section class="mb-14">
-      <span class="section-label">Recherche et expériences</span>
-      <div class="parcours-row">
-        <span class="meta"></span>
-        <p class="font-serif text-[0.95rem] text-muted italic mt-0 mb-0">À compléter.</p>
+      <span class="section-label">Expérience</span>
+      <div>
+        {experience.map(e => (
+          <div class="parcours-row">
+            <span class="meta pt-[0.15rem]">{e.years}</span>
+            <div>
+              <p class="font-serif text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
+              <p class="meta mb-1">{e.sub}</p>
+              <p class="font-serif text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
 
-    <!-- Distinctions -->
+    <!-- Travaux de recherche -->
+    <section class="mb-14">
+      <span class="section-label">Travaux de recherche</span>
+      <div>
+        {recherche.map(e => (
+          <div class="parcours-row">
+            <span class="meta pt-[0.15rem]">{e.years}</span>
+            <div>
+              <p class="font-serif text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">{e.title}</p>
+              <p class="meta mb-1">{e.sub}</p>
+              <p class="font-serif text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">{e.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Centres d'intérêt -->
     <section class="mb-16">
-      <span class="section-label">Distinctions</span>
+      <span class="section-label">Centres d'intérêt</span>
       <div class="parcours-row">
         <span class="meta"></span>
-        <p class="font-serif text-[0.95rem] text-muted italic mt-0 mb-0">À compléter.</p>
+        <p class="font-serif text-[1rem] text-ink leading-relaxed mt-0 mb-0">
+          Littérature française du XIXe siècle. Droit, en particulier ses intersections
+          avec l'économie industrielle. Handball, en compétition dans l'équipe de
+          l'École polytechnique. Tennis.
+        </p>
       </div>
     </section>
 

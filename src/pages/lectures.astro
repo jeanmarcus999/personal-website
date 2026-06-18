@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Ajouter un nouveau mois en tête de liste.
+// Format : { label: string, entries: { author, title, year, note }[] }
+const months: Array<{
+  label: string;
+  entries: Array<{ author: string; title: string; year: number; note: string }>;
+}> = [
+  {
+    label: 'Juin 2026',
+    entries: [], // À compléter
+  },
+  {
+    label: 'Mai 2026',
+    entries: [], // À compléter
+  },
+  {
+    label: 'Avril 2026',
+    entries: [], // À compléter
+  },
+];
+---
+
+<BaseLayout
+  title="Lectures"
+  description="Sélection mensuelle de lectures recommandées par Jean Marcus."
+>
+  <div class="page-wrapper">
+
+    <h1 class="font-serif text-[2.6rem] md:text-[3.2rem] font-semibold leading-[1.1] tracking-[-0.01em] text-ink pt-16 pb-6 md:pt-24">
+      Lectures
+    </h1>
+
+    <p class="font-serif text-[1rem] text-muted leading-relaxed mb-14 max-w-reading">
+      Une sélection mensuelle de livres que je recommande. Mise à jour chaque mois.
+    </p>
+
+    {months.map(month => (
+      <section class="mb-12">
+        <span class="section-label">{month.label}</span>
+
+        {month.entries.length === 0 ? (
+          <div class="parcours-row">
+            <span class="meta"></span>
+            <p class="font-serif text-[0.95rem] text-muted italic mt-0 mb-0">À compléter.</p>
+          </div>
+        ) : (
+          <div>
+            {month.entries.map(e => (
+              <div class="parcours-row">
+                <span class="meta pt-[0.15rem]">{e.year}</span>
+                <div>
+                  <p class="font-serif text-[1.05rem] font-medium text-ink leading-snug mb-1 mt-0">
+                    {e.author}, <em>{e.title}</em>
+                  </p>
+                  <p class="font-serif text-[0.95rem] text-muted leading-relaxed mt-0 mb-0">
+                    {e.note}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    ))}
+
+  </div>
+</BaseLayout>
