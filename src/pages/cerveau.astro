@@ -37,8 +37,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <!-- Timeline -->
     <div id="timeline-bar" hidden>
-      <span id="tl-year">2021</span>
-      <input id="tl-slider" type="range" min="2021" max="2027" value="2027" step="1">
+      <div id="tl-info">
+        <span id="tl-year">2021</span>
+        <span id="tl-label">Mathématiques</span>
+      </div>
+      <div id="tl-controls">
+        <input id="tl-slider" type="range" min="2021" max="2027" value="2021" step="1">
+        <button id="tl-play" title="Lecture automatique">▶</button>
+      </div>
     </div>
 
     <!-- Hint -->
@@ -224,41 +230,70 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     bottom: 1.5rem;
     right: 1.5rem;
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: rgba(8,8,8,0.85);
-    border: 1px solid rgba(255,255,255,0.07);
-    padding: 0.6rem 1.1rem;
+    flex-direction: column;
+    gap: 0.55rem;
+    background: rgba(8,8,8,0.92);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 0.85rem 1.1rem;
     z-index: 10;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    min-width: 220px;
+  }
+  #tl-info {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
   }
   #tl-year {
     font-family: "Inter Variable", system-ui, sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.05em;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #ccc;
+  }
+  #tl-label {
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.68rem;
     color: #666;
-    min-width: 3rem;
+    letter-spacing: 0.02em;
+  }
+  #tl-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
   }
   #tl-slider {
     -webkit-appearance: none;
     appearance: none;
-    width: 140px; height: 1px;
+    flex: 1;
+    height: 2px;
     background: rgba(255,255,255,0.12);
     outline: none;
     cursor: pointer;
   }
   #tl-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 9px; height: 9px;
-    background: #888;
+    width: 10px; height: 10px;
+    background: #ccc;
     border-radius: 50%;
   }
   #tl-slider::-moz-range-thumb {
-    width: 9px; height: 9px;
-    background: #888;
+    width: 10px; height: 10px;
+    background: #ccc;
     border-radius: 50%;
     border: none;
   }
+  #tl-play {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.25rem;
+    transition: color 0.15s;
+    line-height: 1;
+  }
+  #tl-play:hover { color: #ccc; }
 
   /* ── Hint ───────────────────────────────────────────────── */
   #brain-hint {
@@ -600,7 +635,7 @@ function nodeVisible(n: SimNode): number {
   if (!timelineMode) return 1;
   const id = n.type === 'l2' ? (n.parent ?? n.id) : n.id;
   const yr = TL_YEAR[id] ?? 2021;
-  return yr <= timelineYear ? 1 : 0.04;
+  return yr <= timelineYear ? 1 : 0;
 }
 
 function draw() {
@@ -680,6 +715,7 @@ function hitTest(gx: number, gy: number): SimNode | null {
   let best: SimNode | null = null;
   let bestD = Infinity;
   for (const n of nodes) {
+    if (nodeVisible(n) === 0) continue;
     const dx = n.x - gx, dy = n.y - gy;
     const d = Math.sqrt(dx * dx + dy * dy);
     const st = NSTYLE[n.type];
@@ -882,22 +918,58 @@ thoughtBox.addEventListener('click', () => { thoughtBox.hidden = true; clearTime
 
 // ── TIMELINE ─────────────────────────────────────────────────
 
+const TL_LABEL: Record<number, string> = {
+  2021: 'Mathématiques',
+  2022: 'Mathématiques',
+  2023: '+ Économie',
+  2024: '+ Transition Énergétique',
+  2025: '+ IA · Marchés de Capitaux',
+  2026: '+ Innovation · Europe · Politique industrielle',
+  2027: 'Vue complète',
+};
+
 const btnTL   = document.getElementById('btn-timeline')!;
 const tlBar   = document.getElementById('timeline-bar')!;
 const tlSlide = document.getElementById('tl-slider') as HTMLInputElement;
-const tlYear  = document.getElementById('tl-year')!;
+const tlYearEl  = document.getElementById('tl-year')!;
+const tlLabelEl = document.getElementById('tl-label')!;
+const tlPlay  = document.getElementById('tl-play')!;
+
+function setYear(yr: number) {
+  timelineYear = yr;
+  tlSlide.value = String(yr);
+  tlYearEl.textContent = yr >= 2027 ? '2026+' : String(yr);
+  tlLabelEl.textContent = TL_LABEL[yr] ?? '';
+  draw();
+}
 
 btnTL.addEventListener('click', () => {
   timelineMode = !timelineMode;
   tlBar.hidden = !timelineMode;
   btnTL.classList.toggle('active', timelineMode);
-  draw();
+  if (timelineMode) setYear(2021);
+  else { timelineYear = 2027; draw(); }
 });
 
-tlSlide.addEventListener('input', () => {
-  timelineYear = parseInt(tlSlide.value);
-  tlYear.textContent = timelineYear >= 2027 ? '2026+' : String(timelineYear);
-  draw();
+tlSlide.addEventListener('input', () => setYear(parseInt(tlSlide.value)));
+
+let playTimer = 0;
+const PLAY_YEARS = [2021, 2023, 2024, 2025, 2026, 2027];
+
+tlPlay.addEventListener('click', () => {
+  clearInterval(playTimer);
+  setYear(2021);
+  tlPlay.textContent = '■';
+  let idx = 0;
+  playTimer = window.setInterval(() => {
+    idx++;
+    if (idx >= PLAY_YEARS.length) {
+      clearInterval(playTimer);
+      tlPlay.textContent = '▶';
+      return;
+    }
+    setYear(PLAY_YEARS[idx]);
+  }, 1100);
 });
 
 // ── BOOT ─────────────────────────────────────────────────────

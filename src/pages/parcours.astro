@@ -40,11 +40,12 @@ const formation: Entry[] = [
 ];
 
 interface Entry {
-  institution: string;
-  years:       string;
-  sub?:        string;
-  subUrl?:     string;
-  body:        string;
+  institution:  string;
+  years:        string;
+  sub?:         string;
+  supervisor?:  string;
+  subUrl?:      string;
+  body:         string;
 }
 
 const experience: Entry[] = [
@@ -52,6 +53,7 @@ const experience: Entry[] = [
     institution: 'MIT, Department of Economics',
     years:       '2026',
     sub:         "Projet de recherche sous la direction d'Esther Duflo",
+    supervisor:  'Esther Duflo',
     subUrl:      'https://economics.mit.edu/faculty/eduflo',
     body: `Je travaille sur des sujets situés à l'intersection de l'économie du
       développement et de l'intelligence artificielle. Mes recherches portent notamment
@@ -77,6 +79,7 @@ const recherche: Entry[] = [
     institution: 'INRIA Sierra',
     years:       '2025 à 2026',
     sub:         "Projet de recherche sous la direction d'Umut Şimşekli",
+    supervisor:  'Umut Şimşekli',
     subUrl:      'https://www.di.ens.fr/~simsekli/',
     body: `J'ai travaillé sur des questions théoriques en apprentissage profond. Mes
       recherches portent sur les bornes de généralisation dépendantes des données et sur
@@ -87,6 +90,8 @@ const recherche: Entry[] = [
     institution: 'TotalEnergies',
     years:       '2024 à 2025',
     sub:         'Projet de recherche sous la direction de Thomas-Olivier Léautier',
+    supervisor:  'Thomas-Olivier Léautier',
+    subUrl:      'https://www.tse-fr.eu/people/thomas-olivier-leautier',
     body: `J'ai étudié l'économie des technologies de capture du carbone : leur viabilité
       économique, leurs stratégies de financement et les politiques publiques susceptibles
       d'en favoriser le déploiement. Cette expérience a renforcé mon intérêt pour les
@@ -115,12 +120,14 @@ const recherche: Entry[] = [
             <span class="meta flex-shrink-0">{e.years}</span>
           </div>
           {e.sub && (
-            <p class="meta mb-2">
-              {e.subUrl
-                ? <a href={e.subUrl} target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">{e.sub}</a>
+            <p class="meta mb-2" set:html={
+              e.supervisor && e.subUrl
+                ? e.sub.replace(
+                    e.supervisor,
+                    `<a href="${e.subUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">${e.supervisor}</a>`
+                  )
                 : e.sub
-              }
-            </p>
+            } />
           )}
           <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
             {e.body}
@@ -141,12 +148,14 @@ const recherche: Entry[] = [
             <span class="meta flex-shrink-0">{e.years}</span>
           </div>
           {e.sub && (
-            <p class="meta mb-2">
-              {e.subUrl
-                ? <a href={e.subUrl} target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">{e.sub}</a>
+            <p class="meta mb-2" set:html={
+              e.supervisor && e.subUrl
+                ? e.sub.replace(
+                    e.supervisor,
+                    `<a href="${e.subUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">${e.supervisor}</a>`
+                  )
                 : e.sub
-              }
-            </p>
+            } />
           )}
           <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
             {e.body}
@@ -167,12 +176,14 @@ const recherche: Entry[] = [
             <span class="meta flex-shrink-0">{e.years}</span>
           </div>
           {e.sub && (
-            <p class="meta mb-2">
-              {e.subUrl
-                ? <a href={e.subUrl} target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">{e.sub}</a>
+            <p class="meta mb-2" set:html={
+              e.supervisor && e.subUrl
+                ? e.sub.replace(
+                    e.supervisor,
+                    `<a href="${e.subUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">${e.supervisor}</a>`
+                  )
                 : e.sub
-              }
-            </p>
+            } />
           )}
           <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
             {e.body}
