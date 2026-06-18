@@ -5,8 +5,8 @@ pubDate: 2026-06-15
 draft: false
 type: note
 coauthors:
-  - Henrik Berger
   - Paul-Hugo Fischer
+  - Henrik Berger
 ---
 
 Le lancement de ChatGPT par OpenAI en novembre 2022 marque un basculement rapide : le produit atteint le million d'utilisateurs en quelques jours, illustrant une dynamique d'adoption extrêmement accélérée. Même si ses performances restent imparfaites, cet événement ouvre une phase de transformation technologique majeure, souvent décrite comme schumpétérienne.
