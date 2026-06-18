@@ -6,39 +6,52 @@ import PostCard from '../../components/PostCard.astro';
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const sorted = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const byYear = sorted.reduce<Record<number, typeof sorted>>((acc, post) => {
-  const year = post.data.pubDate.getFullYear();
-  if (!acc[year]) acc[year] = [];
-  acc[year].push(post);
-  return acc;
-}, {});
+const notes    = sorted.filter(p => p.data.type === 'note');
+const articles = sorted.filter(p => p.data.type === 'article');
 
-const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+const linkStyle = "color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px";
 ---
 
 <BaseLayout
   title="Écrits"
-  description="Notes sur le financement et le déploiement des technologies stratégiques en Europe."
+  description="Notes et articles sur les transformations économiques et technologiques en Europe."
 >
   <div class="page-wrapper">
     <h1 class="page-title">Écrits</h1>
-    <p class="font-serif text-[0.95rem] sm:text-[1rem] text-muted leading-relaxed mb-12 sm:mb-14">
-      Notes sur les transformations économiques et technologiques en Europe.
+    <p class="font-serif text-[0.95rem] sm:text-[1rem] text-muted leading-relaxed mb-5">
+      Notes et articles sur les transformations économiques et technologiques en Europe.
     </p>
-    {years.map(year => (
-      <section class="mb-10">
-        <span class="section-label">{year}</span>
-        <div>
-          {byYear[year].map(post => (
-            <PostCard
-              title={post.data.title}
-              description={post.data.description}
-              pubDate={post.data.pubDate}
-              slug={post.id}
-            />
-          ))}
-        </div>
-      </section>
-    ))}
+    <div class="flex gap-7 mb-12 sm:mb-14">
+      <a href="#notes"    class="meta" style={linkStyle}>Notes ↓</a>
+      <a href="#articles" class="meta" style={linkStyle}>Articles ↓</a>
+    </div>
+
+    <section id="notes" class="mb-12 sm:mb-14" style="scroll-margin-top:2rem">
+      <span class="section-label">Notes</span>
+      <div>
+        {notes.map(post => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.id}
+          />
+        ))}
+      </div>
+    </section>
+
+    <section id="articles" class="mb-12 sm:mb-14" style="scroll-margin-top:2rem">
+      <span class="section-label">Articles</span>
+      <div>
+        {articles.map(post => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.id}
+          />
+        ))}
+      </div>
+    </section>
   </div>
 </BaseLayout>

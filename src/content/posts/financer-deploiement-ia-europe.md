@@ -3,6 +3,7 @@ title: "Financer le deploiement de l'IA en Europe : conditions de capital"
 description: "Les modeles fondationnaux sont construits aux Etats-Unis et en Chine. Ce qui reste ouvert en Europe, c'est la question du deploiement : quelles structures de capital permettent d'y tenir le rythme ?"
 pubDate: 2025-06-12
 draft: false
+type: article
 ---
 
 Le debat europeen sur l'intelligence artificielle se concentre souvent sur la regulation et la

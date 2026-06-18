@@ -3,6 +3,7 @@ title: "L'epargne europeenne comme levier de la transition IA"
 description: "L'Europe dispose d'un stock d'epargne parmi les plus eleves au monde, mais ses mecanismes d'allocation ne le dirigent pas vers le financement des infrastructures technologiques. Ce n'est pas une fatalite."
 pubDate: 2025-05-28
 draft: false
+type: article
 ---
 
 L'Union europeenne represente environ 25 % du PIB mondial mais une fraction marginale
