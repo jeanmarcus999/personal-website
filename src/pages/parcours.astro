@@ -47,7 +47,7 @@ const experience: Entry[] = [
   {
     institution: 'MIT, Department of Economics',
     years:       '2026',
-    sub:         "Projet de recherche sous la direction d'Esther Duflo",
+    sub:         "Assistant de recherche d'Esther Duflo",
     supervisor:  'Esther Duflo',
     subUrl:      'https://economics.mit.edu/faculty/eduflo',
     body: `Je travaille sur des sujets situés à l'intersection de l'économie du
@@ -60,7 +60,7 @@ const experience: Entry[] = [
   {
     institution: 'Centerview Partners',
     years:       '2025',
-    sub:         'Fusions-acquisitions, Paris',
+    sub:         'Analyste en fusions-acquisitions, Paris',
     body: `J'ai participé à des opérations de fusion-acquisition et de levée de fonds
       dans différents secteurs, notamment la fintech, le luxe et l'intelligence
       artificielle. Cette expérience m'a permis d'observer concrètement comment les
@@ -124,9 +124,11 @@ const recherche: Entry[] = [
                 : e.sub
             } />
           )}
-          <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
-            {e.body}
-          </p>
+          {e.body && (
+            <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
+              {e.body}
+            </p>
+          )}
         </div>
       ))}
     </section>
@@ -152,9 +154,11 @@ const recherche: Entry[] = [
                 : e.sub
             } />
           )}
-          <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
-            {e.body}
-          </p>
+          {e.body && (
+            <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
+              {e.body}
+            </p>
+          )}
         </div>
       ))}
     </section>
@@ -180,23 +184,13 @@ const recherche: Entry[] = [
                 : e.sub
             } />
           )}
-          <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
-            {e.body}
-          </p>
+          {e.body && (
+            <p class="font-serif text-[0.95rem] text-muted leading-[1.75] prose-justified mt-1 mb-0">
+              {e.body}
+            </p>
+          )}
         </div>
       ))}
-    </section>
-
-    <!-- Centres d'intérêt -->
-    <section class="mb-14 sm:mb-16">
-      <span class="section-label">Centres d'intérêt</span>
-      <div class="cv-entry">
-        <p class="font-serif text-[0.95rem] text-ink leading-[1.75] prose-justified mt-0 mb-0">
-          Littérature française du XIXe siècle. Droit, en particulier ses intersections
-          avec l'économie industrielle. Handball, en compétition dans l'équipe de
-          l'École polytechnique. Tennis.
-        </p>
-      </div>
     </section>
 
     <div class="mb-8">
