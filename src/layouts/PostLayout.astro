@@ -5,9 +5,10 @@ interface Props {
   title:       string;
   description: string;
   pubDate:     Date;
+  coauthors?:  string[];
 }
 
-const { title, description, pubDate } = Astro.props;
+const { title, description, pubDate, coauthors } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const dateStr = pubDate.toLocaleDateString('fr-FR', {
@@ -45,7 +46,7 @@ const articleSchema = JSON.stringify({
         <h1 class="font-serif text-[1.6rem] sm:text-[1.9rem] md:text-[2.3rem] font-semibold leading-[1.2] tracking-[-0.01em] text-ink mb-3">
           {title}
         </h1>
-        <p class="meta">{dateStr}</p>
+        <p class="meta">{dateStr}{coauthors && coauthors.length > 0 && ` — avec ${coauthors.join(', ')}`}</p>
       </header>
 
       <div class="prose prose-justified">
