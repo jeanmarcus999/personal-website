@@ -1,2 +1,8 @@
+# WIP — désactiver le Disallow quand le site est public
 User-agent: *
 Disallow: /
+
+# Décommenter ces lignes quand le site est public :
+# User-agent: *
+# Allow: /
+# Sitemap: https://jeanmarcus.me/sitemap-index.xml

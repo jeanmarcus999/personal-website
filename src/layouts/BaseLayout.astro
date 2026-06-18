@@ -7,18 +7,38 @@ interface Props {
   title?:       string;
   description?: string;
   ogImage?:     string;
-  noIndex?:     boolean;
 }
 
 const {
   title       = 'Jean Marcus',
-  description = 'Notes sur le financement et le deploiement des technologies strategiques en Europe.',
-  ogImage     = '/og-default.png',
-  noIndex     = false,
+  description = 'Financement et déploiement des technologies stratégiques en Europe. École Polytechnique, MIT, Corps des Mines.',
+  ogImage     = '/og.png',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const pageTitle    = title === 'Jean Marcus' ? title : `${title} — Jean Marcus`;
+
+const personSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jean Marcus',
+  url: 'https://jeanmarcus.me',
+  description: 'Financement et déploiement des technologies stratégiques en Europe.',
+  alumniOf: [
+    { '@type': 'CollegeOrUniversity', name: 'École Polytechnique' },
+    { '@type': 'CollegeOrUniversity', name: 'Massachusetts Institute of Technology' },
+  ],
+  sameAs: [
+    'https://linkedin.com/in/jean-marcus',
+  ],
+});
+
+// ─── Umami analytics ───────────────────────────────────────────────────────
+// 1. Crée un compte sur https://umami.is (gratuit, 10k vues/mois)
+// 2. Ajoute ton site, copie le "Website ID"
+// 3. Remplace '' ci-dessous par ton ID (format UUID)
+const UMAMI_ID = '';
+// ───────────────────────────────────────────────────────────────────────────
 ---
 
 <!doctype html>
@@ -31,6 +51,8 @@ const pageTitle    = title === 'Jean Marcus' ? title : `${title} — Jean Marcus
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+
+    <!-- WIP : enlever cette ligne quand le site est public -->
     <meta name="robots" content="noindex, nofollow" />
 
     <!-- OpenGraph -->
@@ -39,6 +61,8 @@ const pageTitle    = title === 'Jean Marcus' ? title : `${title} — Jean Marcus
     <meta property="og:description" content={description} />
     <meta property="og:url"         content={canonicalURL} />
     <meta property="og:image"       content={new URL(ogImage, Astro.site)} />
+    <meta property="og:locale"      content="fr_FR" />
+    <meta property="og:site_name"   content="Jean Marcus" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card"        content="summary_large_image" />
@@ -50,18 +74,37 @@ const pageTitle    = title === 'Jean Marcus' ? title : `${title} — Jean Marcus
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="Jean Marcus — Ecrits"
+      title="Jean Marcus — Écrits"
       href={new URL('rss.xml', Astro.site)}
     />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Schema.org Person -->
+    <script type="application/ld+json" set:html={personSchema} />
+
+    <!-- Umami analytics (sans cookies, sans bannière GDPR) -->
+    {UMAMI_ID && (
+      <script
+        define:vars={{ UMAMI_ID }}
+        is:inline
+      >
+        var s = document.createElement('script');
+        s.defer = true;
+        s.src = 'https://analytics.umami.is/script.js';
+        s.setAttribute('data-website-id', UMAMI_ID);
+        document.head.appendChild(s);
+      </script>
+    )}
   </head>
   <body>
+    <!-- WIP : enlever ce bloc quand le code d'accès est retiré -->
     <script is:inline>
       if (!localStorage.getItem('wip')) {
         window.location.replace('/entrer');
       }
     </script>
+
     <Header />
     <main>
       <slot />
