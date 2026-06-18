@@ -41,6 +41,7 @@ interface Entry {
   supervisor?:  string;
   subUrl?:      string;
   body:         string;
+  papers?:      Array<{ title: string; url: string }>;
 }
 
 const experience: Entry[] = [
@@ -80,6 +81,12 @@ const recherche: Entry[] = [
       recherches portent sur les bornes de généralisation dépendantes des données et sur
       les propriétés géométriques permettant de mieux comprendre pourquoi les modèles
       modernes apprennent et généralisent efficacement.`,
+    papers: [
+      {
+        title: 'A Survey on Data-Dependent Worst-Case Generalization Bounds',
+        url:   'https://arxiv.org/abs/2605.13913',
+      },
+    ],
   },
   {
     institution: 'TotalEnergies',
@@ -91,6 +98,12 @@ const recherche: Entry[] = [
       économique, leurs stratégies de financement et les politiques publiques susceptibles
       d'en favoriser le déploiement. Cette expérience a renforcé mon intérêt pour les
       mécanismes permettant de financer les transformations technologiques de long terme.`,
+    papers: [
+      {
+        title: 'The Economic Viability of Carbon Capture and Storage (CCS): Supply Curves from Project Data (2030) and Scenario-Based Demand to 2050',
+        url:   'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6585338',
+      },
+    ],
   },
 ];
 ---
@@ -129,6 +142,17 @@ const recherche: Entry[] = [
               {e.body}
             </p>
           )}
+          {e.papers?.map(p => (
+            <p class="meta mt-2 mb-0">
+              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint —</span>
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+              >{p.title}</a>
+            </p>
+          ))}
         </div>
       ))}
     </section>
@@ -159,6 +183,17 @@ const recherche: Entry[] = [
               {e.body}
             </p>
           )}
+          {e.papers?.map(p => (
+            <p class="meta mt-2 mb-0">
+              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint —</span>
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+              >{p.title}</a>
+            </p>
+          ))}
         </div>
       ))}
     </section>
@@ -189,6 +224,17 @@ const recherche: Entry[] = [
               {e.body}
             </p>
           )}
+          {e.papers?.map(p => (
+            <p class="meta mt-2 mb-0">
+              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint —</span>
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
+              >{p.title}</a>
+            </p>
+          ))}
         </div>
       ))}
     </section>
