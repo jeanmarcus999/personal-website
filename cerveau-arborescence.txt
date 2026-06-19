@@ -1,68 +1,128 @@
-Cerveau — Arborescence complète
-================================
+Cerveau — Arborescence complète avec contenus
+===============================================
 
-Transformation Technologique  [racine]
-│
-├── Innovation  [L1 · 2026]
-│   ├── Schumpeter
-│   ├── Destruction créatrice
-│   ├── Technologies générales
-│   ├── Diffusion
-│   └── Productivité
-│
-├── Intelligence Artificielle  [L1 · 2025]
-│   ├── Deep Learning
-│   ├── Généralisation
-│   ├── Modèles de fondation
-│   ├── IA & Économie
-│   └── IA & Santé
-│
-├── Politique Industrielle  [L1 · 2026]
-│   ├── Capacité étatique
-│   ├── Régulation
-│   ├── Innovation de défense
-│   └── Industries stratégiques
-│
-├── Marchés de Capitaux  [L1 · 2025]
-│   ├── Capital-risque
-│   ├── Private Equity
-│   ├── Marchés publics
-│   └── Marchés européens
-│
-├── Europe  [L1 · 2026]
-│   ├── Compétitivité
-│   ├── Souveraineté
-│   └── Retard d'innovation
-│
-├── Transition Énergétique  [L1 · 2024]
-│   ├── Capture CO₂
-│   ├── Marchés électriques
-│   ├── Nucléaire
-│   └── Finance verte
-│
-├── Économie  [L1 · 2023]
-│   ├── Théorie de la croissance
-│   ├── Économie du développement
-│   ├── Institutions
-│   └── Org. industrielle
-│
-└── Mathématiques  [L1 · 2021]
-    ├── Probabilités
-    ├── Optimisation
-    ├── Géométrie
-    └── Processus stochastiques
+
+TRANSFORMATION TECHNOLOGIQUE  [racine]
+  Le fil conducteur de mes intérêts intellectuels. Comment les sociétés adoptent
+  les nouvelles technologies, quelles institutions facilitent ou freinent cette
+  adoption, et comment l'épargne et les marchés de capitaux financent ces
+  transformations sur le long terme.
+
+
+INNOVATION  [L1 · 2026]
+  Comment les nouvelles technologies sont inventées, améliorées et diffusées au
+  sein des économies.
+  Lectures : Joseph Schumpeter, Capitalism, Socialism and Democracy
+             Joel Mokyr, The Lever of Riches
+             Everett Rogers, Diffusion of Innovations
+  Sous-thèmes :
+    · Schumpeter
+    · Destruction créatrice
+    · Technologies générales
+    · Diffusion
+    · Productivité
+
+
+INTELLIGENCE ARTIFICIELLE  [L1 · 2025]
+  Comprendre les fondements techniques de l'IA et ses conséquences économiques,
+  organisationnelles et sociales.
+  Lectures : Ian Goodfellow et al., Deep Learning
+             Agrawal, Gans & Goldfarb, Prediction Machines
+  Recherche : Généralisation dépendante des données (INRIA Sierra)
+              Complexité géométrique des réseaux de neurones
+              Stabilité des algorithmes d'apprentissage
+  Sous-thèmes :
+    · Deep Learning
+    · Généralisation
+    · Modèles de fondation
+    · IA & Économie
+    · IA & Santé
+
+
+POLITIQUE INDUSTRIELLE  [L1 · 2026]
+  Comment les États accélèrent ou freinent le changement technologique par la
+  régulation, les marchés publics et les investissements stratégiques.
+  Lectures : Mariana Mazzucato, The Entrepreneurial State
+             Luc Soete, Innovation and Its Enemies
+  Penseurs : Mariana Mazzucato · Alexander Hamilton · Jean Tirole · Dani Rodrik
+  Sous-thèmes :
+    · Capacité étatique
+    · Régulation
+    · Innovation de défense
+    · Industries stratégiques
+
+
+MARCHÉS DE CAPITAUX  [L1 · 2025]
+  Comment les sociétés mobilisent l'épargne pour financer l'innovation et les
+  investissements de long terme nécessaires aux transformations technologiques.
+  Lectures : Charles Kindleberger, Manias, Panics and Crashes
+             Peter Bernstein, Against the Gods
+  Questions ouvertes :
+    ? Pourquoi l'Europe peine-t-elle à financer l'innovation à grande échelle ?
+    ? Quelles structures institutionnelles soutiennent la prise de risque à long terme ?
+  Sous-thèmes :
+    · Capital-risque
+    · Private Equity
+    · Marchés publics
+    · Marchés européens
+
+
+EUROPE  [L1 · 2026]
+  L'avenir économique de l'Europe dans un monde façonné par l'IA, les transitions
+  énergétiques et la fragmentation géopolitique.
+  Questions ouvertes :
+    ? L'Europe peut-elle rester technologiquement pertinente face aux États-Unis et à la Chine ?
+    ? Comment construire des marchés de capitaux européens profonds et liquides ?
+    ? Quelle politique industrielle pour une Europe souveraine ?
+  Sous-thèmes :
+    · Compétitivité
+    · Souveraineté
+    · Retard d'innovation
+
+
+TRANSITION ÉNERGÉTIQUE  [L1 · 2024]
+  L'économie et le financement de la décarbonisation : viabilité économique,
+  structures de financement et politiques publiques.
+  Lectures : David MacKay, Sustainable Energy Without the Hot Air
+  Recherche : Économie des technologies de capture du carbone (TotalEnergies, 2024)
+  Sous-thèmes :
+    · Capture CO₂
+    · Marchés électriques
+    · Nucléaire
+    · Finance verte
+
+
+ÉCONOMIE  [L1 · 2023]
+  Théories expliquant la croissance, les institutions et le développement.
+  Fondement de toute analyse des transformations technologiques et de l'action publique.
+  Penseurs : Daron Acemoglu · Esther Duflo · Paul Romer
+             Friedrich Hayek · Kenneth Arrow · Jean Tirole
+  Sous-thèmes :
+    · Théorie de la croissance
+    · Économie du développement
+    · Institutions
+    · Org. industrielle
+
+
+MATHÉMATIQUES  [L1 · 2021]
+  Le langage sous-jacent aux modèles, aux algorithmes et à l'analyse économique rigoureuse.
+  Sous-thèmes :
+    · Probabilités
+    · Optimisation
+    · Géométrie
+    · Processus stochastiques
 
 
 Liens transversaux
 ------------------
-Mathématiques          ↔  Intelligence Artificielle
-Mathématiques          ↔  Économie
+Mathématiques             ↔  Intelligence Artificielle
+Mathématiques             ↔  Économie
 Intelligence Artificielle ↔  Innovation
-Marchés de Capitaux    ↔  Europe
-Transition Énergétique ↔  Politique Industrielle
-Économie               ↔  Innovation
+Marchés de Capitaux       ↔  Europe
+Transition Énergétique    ↔  Politique Industrielle
+Économie                  ↔  Innovation
 Économie du développement ↔  IA & Santé
-Marchés européens      ↔  Retard d'innovation
+Marchés européens         ↔  Retard d'innovation
 
 
 Chronologie (mode timeline)
