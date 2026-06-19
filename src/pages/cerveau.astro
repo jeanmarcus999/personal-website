@@ -655,11 +655,11 @@ function tick() {
     });
 
     // Integrate
-    const MAX_V = 40;
+    const MAX_V = 22;
     nodes.forEach(n => {
       if (n.fx !== undefined) { n.x = n.fx; n.y = n.fy!; return; }
-      n.vx = Math.max(-MAX_V, Math.min(MAX_V, n.vx * 0.72));
-      n.vy = Math.max(-MAX_V, Math.min(MAX_V, n.vy * 0.72));
+      n.vx = Math.max(-MAX_V, Math.min(MAX_V, n.vx * 0.84));
+      n.vy = Math.max(-MAX_V, Math.min(MAX_V, n.vy * 0.84));
       n.x += n.vx;
       n.y += n.vy;
     });
@@ -979,7 +979,7 @@ function select(n: SimNode) {
     if (adj === n) continue;
     const dx = adj.x - n.x, dy = adj.y - n.y;
     const d = Math.sqrt(dx * dx + dy * dy) || 1;
-    const str = isConnected(adj, n) ? 18 : 4;
+    const str = isConnected(adj, n) ? 10 : 2;
     adj.vx += (dx / d) * str;
     adj.vy += (dy / d) * str;
   }
