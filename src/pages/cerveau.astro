@@ -559,6 +559,7 @@ const ctx    = canvas.getContext('2d')!;
 
 let W = 0, H = 0, DPR = window.devicePixelRatio || 1;
 let panX = 0, panY = 0, zoom = 1;
+let camTargetX = 0, camTargetY = 0, camTargetZoom = 1, camAnimating = false;
 
 function resize() {
   const header = document.querySelector('header') as HTMLElement;
@@ -613,52 +614,70 @@ function nodeCharge(n: SimNode) {
 }
 
 function tick() {
-  if (alpha < 0.001) return;
-  alpha *= 0.978;
+  const physicsOn = alpha >= 0.001;
+  if (!physicsOn && !camAnimating) return;
 
-  // Spring forces (links)
-  for (const lk of links) {
-    const s = lk.source, t = lk.target;
-    const dx = t.x - s.x, dy = t.y - s.y;
-    const d = Math.sqrt(dx * dx + dy * dy) || 1;
-    const f = (d - lk.dist) / d * lk.w * alpha;
-    if (s.fx === undefined) { s.vx += dx * f; s.vy += dy * f; }
-    if (t.fx === undefined) { t.vx -= dx * f; t.vy -= dy * f; }
+  if (physicsOn) alpha *= 0.978;
+
+  if (physicsOn) {
+    // Spring forces (links)
+    for (const lk of links) {
+      const s = lk.source, t = lk.target;
+      const dx = t.x - s.x, dy = t.y - s.y;
+      const d = Math.sqrt(dx * dx + dy * dy) || 1;
+      const f = (d - lk.dist) / d * lk.w * alpha;
+      if (s.fx === undefined) { s.vx += dx * f; s.vy += dy * f; }
+      if (t.fx === undefined) { t.vx -= dx * f; t.vy -= dy * f; }
+    }
+
+    // Repulsion (many-body)
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const d2 = dx * dx + dy * dy || 0.01;
+        const str = (nodeCharge(a) + nodeCharge(b)) / d2 * alpha;
+        if (a.fx === undefined) { a.vx -= dx * str; a.vy -= dy * str; }
+        if (b.fx === undefined) { b.vx += dx * str; b.vy += dy * str; }
+      }
+    }
+
+    // Centering
+    let mcx = 0, mcy = 0;
+    nodes.forEach(n => { mcx += n.x; mcy += n.y; });
+    mcx /= nodes.length; mcy /= nodes.length;
+    const tcx = W / 2, tcy = H / 2;
+    nodes.forEach(n => {
+      if (n.fx === undefined) {
+        n.vx += (tcx - mcx) * 0.08 * alpha;
+        n.vy += (tcy - mcy) * 0.08 * alpha;
+      }
+    });
+
+    // Integrate
+    const MAX_V = 40;
+    nodes.forEach(n => {
+      if (n.fx !== undefined) { n.x = n.fx; n.y = n.fy!; return; }
+      n.vx = Math.max(-MAX_V, Math.min(MAX_V, n.vx * 0.72));
+      n.vy = Math.max(-MAX_V, Math.min(MAX_V, n.vy * 0.72));
+      n.x += n.vx;
+      n.y += n.vy;
+    });
   }
 
-  // Repulsion (many-body)
-  for (let i = 0; i < nodes.length; i++) {
-    for (let j = i + 1; j < nodes.length; j++) {
-      const a = nodes[i], b = nodes[j];
-      const dx = b.x - a.x, dy = b.y - a.y;
-      const d2 = dx * dx + dy * dy || 0.01;
-      const str = (nodeCharge(a) + nodeCharge(b)) / d2 * alpha;
-      if (a.fx === undefined) { a.vx -= dx * str; a.vy -= dy * str; }
-      if (b.fx === undefined) { b.vx += dx * str; b.vy += dy * str; }
+  // Camera lerp
+  if (camAnimating) {
+    const lf = 0.1;
+    panX += (camTargetX - panX) * lf;
+    panY += (camTargetY - panY) * lf;
+    zoom += (camTargetZoom - zoom) * lf;
+    if (Math.abs(panX - camTargetX) < 0.4 &&
+        Math.abs(panY - camTargetY) < 0.4 &&
+        Math.abs(zoom - camTargetZoom) < 0.004) {
+      panX = camTargetX; panY = camTargetY; zoom = camTargetZoom;
+      camAnimating = false;
     }
   }
-
-  // Centering
-  let mcx = 0, mcy = 0;
-  nodes.forEach(n => { mcx += n.x; mcy += n.y; });
-  mcx /= nodes.length; mcy /= nodes.length;
-  const tcx = W / 2, tcy = H / 2;
-  nodes.forEach(n => {
-    if (n.fx === undefined) {
-      n.vx += (tcx - mcx) * 0.08 * alpha;
-      n.vy += (tcy - mcy) * 0.08 * alpha;
-    }
-  });
-
-  // Integrate
-  const MAX_V = 40;
-  nodes.forEach(n => {
-    if (n.fx !== undefined) { n.x = n.fx; n.y = n.fy!; return; }
-    n.vx = Math.max(-MAX_V, Math.min(MAX_V, n.vx * 0.72));
-    n.vy = Math.max(-MAX_V, Math.min(MAX_V, n.vy * 0.72));
-    n.x += n.vx;
-    n.y += n.vy;
-  });
 
   draw();
   rafId = requestAnimationFrame(tick);
@@ -674,6 +693,29 @@ function warm() {
   if (alpha < 0.35) alpha = 0.35;
   cancelAnimationFrame(rafId);
   rafId = requestAnimationFrame(tick);
+}
+
+function ensureRunning() {
+  if (alpha < 0.05) alpha = 0.05;
+  cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(tick);
+}
+
+function focusOn(n: SimNode) {
+  const z = 1.65;
+  camTargetZoom = z;
+  camTargetX = W / 2 - n.x * z;
+  camTargetY = H / 2 - n.y * z;
+  camAnimating = true;
+  ensureRunning();
+}
+
+function focusOut() {
+  camTargetZoom = 1;
+  camTargetX = 0;
+  camTargetY = 0;
+  camAnimating = true;
+  ensureRunning();
 }
 
 // ── RENDERING ────────────────────────────────────────────────
@@ -944,6 +986,7 @@ function select(n: SimNode) {
   alpha = Math.max(alpha, 0.7);
   cancelAnimationFrame(rafId);
   rafId = requestAnimationFrame(tick);
+  focusOn(n);
 
   const c = CONTENT[n.id];
   pTitle.textContent = c?.title ?? n.label.replace(/\n/g,' ');
@@ -964,7 +1007,7 @@ function deselect() {
   selectedNode = null;
   panel.classList.remove('open');
   panel.setAttribute('aria-hidden','true');
-  draw();
+  focusOut();
 }
 
 // ── RANDOM THOUGHT ───────────────────────────────────────────
