@@ -364,157 +364,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </style>
 
 <script>
+import {
+  COLORS, L1_ANGLES, NODE_DEFS, LINK_DEFS, CONTENT,
+  THOUGHTS, TL_YEAR, TL_LABEL,
+} from '../data/brain.ts';
 
-// ── DATA ─────────────────────────────────────────────────────
-
-const THOUGHTS = [
-  "Les révolutions technologiques échouent moins par manque d'idées que par défaut d'institutions capables de les absorber.",
-  "Le problème de l'Europe n'est peut-être pas l'innovation, mais son financement.",
-  "L'IA modifie non seulement la productivité, mais aussi l'organisation des entreprises et la structure des marchés.",
-  "La capture du carbone est autant un problème de financement qu'un problème technique.",
-  "La destruction créatrice n'est pas automatique : elle requiert des institutions qui l'acceptent et des marchés qui la financent.",
-  "La souveraineté technologique européenne passera par la construction de marchés de capitaux profonds et liquides.",
-  "Comprendre Schumpeter et Rawls est une condition nécessaire pour penser la politique économique contemporaine.",
-];
-
-const TL_YEAR: Record<string, number> = {
-  math: 2021,
-  economics: 2023,
-  energy: 2024,
-  capital: 2025,
-  ai: 2025,
-  innovation: 2026,
-  industrial_policy: 2026,
-  europe: 2026,
-};
-
-interface NodeDef {
-  id: string;
-  label: string;
-  type: 'root' | 'l1' | 'l2';
-  parent?: string;
+// ── HELPERS ────────────────────────────────────────────────────
+function hexAlpha(hex: string, a: number): string {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
 }
 
-const NODE_DEFS: NodeDef[] = [
-  { id: 'root',             label: 'Transformation\nTechnologique',  type: 'root' },
-  { id: 'innovation',       label: 'Innovation',                     type: 'l1'   },
-  { id: 'ai',               label: 'Intelligence\nArtificielle',     type: 'l1'   },
-  { id: 'industrial_policy',label: 'Politique\nIndustrielle',        type: 'l1'   },
-  { id: 'capital',          label: 'Marchés de\nCapitaux',           type: 'l1'   },
-  { id: 'europe',           label: 'Europe',                         type: 'l1'   },
-  { id: 'energy',           label: 'Transition\nÉnergétique',        type: 'l1'   },
-  { id: 'economics',        label: 'Économie',                       type: 'l1'   },
-  { id: 'math',             label: 'Mathématiques',                  type: 'l1'   },
-  // Innovation
-  { id: 'schumpeter',       label: 'Schumpeter',                     type: 'l2', parent: 'innovation' },
-  { id: 'creative',         label: 'Destruction\ncréatrice',         type: 'l2', parent: 'innovation' },
-  { id: 'gpt_tech',         label: 'Technologies\ngénérales',        type: 'l2', parent: 'innovation' },
-  { id: 'diffusion',        label: 'Diffusion',                      type: 'l2', parent: 'innovation' },
-  { id: 'productivity',     label: 'Productivité',                   type: 'l2', parent: 'innovation' },
-  // AI
-  { id: 'dl',               label: 'Deep Learning',                  type: 'l2', parent: 'ai' },
-  { id: 'generalization',   label: 'Généralisation',                 type: 'l2', parent: 'ai' },
-  { id: 'foundation',       label: 'Modèles de\nfondation',          type: 'l2', parent: 'ai' },
-  { id: 'ai_econ',          label: 'IA & Économie',                  type: 'l2', parent: 'ai' },
-  { id: 'ai_health',        label: 'IA & Santé',                     type: 'l2', parent: 'ai' },
-  // Politique industrielle
-  { id: 'state_cap',        label: 'Capacité\nétatique',             type: 'l2', parent: 'industrial_policy' },
-  { id: 'regulation',       label: 'Régulation',                     type: 'l2', parent: 'industrial_policy' },
-  { id: 'defense_innov',    label: 'Innovation\nde défense',         type: 'l2', parent: 'industrial_policy' },
-  { id: 'strat_sectors',    label: 'Industries\nstratégiques',       type: 'l2', parent: 'industrial_policy' },
-  // Capitaux
-  { id: 'vc',               label: 'Capital-risque',                 type: 'l2', parent: 'capital' },
-  { id: 'pe',               label: 'Private Equity',                 type: 'l2', parent: 'capital' },
-  { id: 'pub_markets',      label: 'Marchés\npublics',               type: 'l2', parent: 'capital' },
-  { id: 'eu_markets',       label: 'Marchés\neuropéens',             type: 'l2', parent: 'capital' },
-  // Europe
-  { id: 'competitiveness',  label: 'Compétitivité',                  type: 'l2', parent: 'europe' },
-  { id: 'sovereignty',      label: 'Souveraineté',                   type: 'l2', parent: 'europe' },
-  { id: 'innov_gap',        label: "Retard\nd'innovation",           type: 'l2', parent: 'europe' },
-  // Énergie
-  { id: 'carbon',           label: 'Capture CO₂',                   type: 'l2', parent: 'energy' },
-  { id: 'elec_markets',     label: 'Marchés\nélectriques',           type: 'l2', parent: 'energy' },
-  { id: 'nuclear',          label: 'Nucléaire',                      type: 'l2', parent: 'energy' },
-  { id: 'green_finance',    label: 'Finance verte',                  type: 'l2', parent: 'energy' },
-  // Économie
-  { id: 'growth',           label: 'Théorie de\nla croissance',      type: 'l2', parent: 'economics' },
-  { id: 'dev_econ',         label: 'Économie du\ndéveloppement',     type: 'l2', parent: 'economics' },
-  { id: 'institutions',     label: 'Institutions',                   type: 'l2', parent: 'economics' },
-  { id: 'ind_org',          label: 'Org. industrielle',              type: 'l2', parent: 'economics' },
-  // Maths
-  { id: 'probability',      label: 'Probabilités',                   type: 'l2', parent: 'math' },
-  { id: 'optimization',     label: 'Optimisation',                   type: 'l2', parent: 'math' },
-  { id: 'geometry',         label: 'Géométrie',                      type: 'l2', parent: 'math' },
-  { id: 'stochastic',       label: 'Processus\nstochastiques',       type: 'l2', parent: 'math' },
-];
+// ── DATA (legacy — now in brain.ts) ──────────────────────────
 
-interface LinkDef { source: string; target: string; dist?: number; w?: number; }
-const LINK_DEFS: LinkDef[] = [
-  // root → l1
-  ...(['innovation','ai','industrial_policy','capital','europe','energy','economics','math'] as string[])
-    .map(t => ({ source: 'root', target: t, dist: 190 })),
-  // l1 → l2 (auto)
-  ...NODE_DEFS.filter(n => n.parent).map(n => ({ source: n.parent!, target: n.id, dist: 88 })),
-  // cross-links
-  { source: 'math',       target: 'ai',          dist: 220, w: 0.15 },
-  { source: 'math',       target: 'economics',   dist: 240, w: 0.15 },
-  { source: 'ai',         target: 'innovation',  dist: 230, w: 0.15 },
-  { source: 'capital',    target: 'europe',      dist: 230, w: 0.12 },
-  { source: 'energy',     target: 'industrial_policy', dist: 220, w: 0.12 },
-  { source: 'economics',  target: 'innovation',  dist: 220, w: 0.12 },
-  { source: 'dev_econ',   target: 'ai_health',   dist: 180, w: 0.1  },
-  { source: 'eu_markets', target: 'innov_gap',   dist: 160, w: 0.1  },
-];
-
-const CONTENT: Record<string, { title: string; body?: string; books?: string[]; thinkers?: string[]; research?: string[]; questions?: string[] }> = {
-  root: {
-    title: 'Transformation Technologique',
-    body: "Le fil conducteur de mes intérêts intellectuels. Comment les sociétés adoptent les nouvelles technologies, quelles institutions facilitent ou freinent cette adoption, et comment l'épargne et les marchés de capitaux financent ces transformations sur le long terme.",
-  },
-  innovation: {
-    title: 'Innovation',
-    body: 'Comment les nouvelles technologies sont inventées, améliorées et diffusées au sein des économies.',
-    books: ['Joseph Schumpeter, Capitalism, Socialism and Democracy', 'Joel Mokyr, The Lever of Riches', 'Everett Rogers, Diffusion of Innovations'],
-  },
-  ai: {
-    title: 'Intelligence Artificielle',
-    body: "Comprendre les fondements techniques de l'IA et ses conséquences économiques, organisationnelles et sociales.",
-    books: ['Ian Goodfellow et al., Deep Learning', 'Agrawal, Gans & Goldfarb, Prediction Machines'],
-    research: ['Généralisation dépendante des données (INRIA Sierra)', 'Complexité géométrique des réseaux de neurones', 'Stabilité des algorithmes d\'apprentissage'],
-  },
-  industrial_policy: {
-    title: 'Politique Industrielle',
-    body: "Comment les États accélèrent ou freinent le changement technologique par la régulation, les marchés publics et les investissements stratégiques.",
-    books: ['Mariana Mazzucato, The Entrepreneurial State', 'Luc Soete, Innovation and Its Enemies'],
-    thinkers: ['Mariana Mazzucato', 'Alexander Hamilton', 'Jean Tirole', 'Dani Rodrik'],
-  },
-  capital: {
-    title: 'Marchés de Capitaux',
-    body: "Comment les sociétés mobilisent l'épargne pour financer l'innovation et les investissements de long terme nécessaires aux transformations technologiques.",
-    books: ['Charles Kindleberger, Manias, Panics and Crashes', 'Peter Bernstein, Against the Gods'],
-    questions: ["Pourquoi l'Europe peine-t-elle à financer l'innovation à grande échelle ?", "Quelles structures institutionnelles soutiennent la prise de risque à long terme ?"],
-  },
-  europe: {
-    title: 'Europe',
-    body: "L'avenir économique de l'Europe dans un monde façonné par l'IA, les transitions énergétiques et la fragmentation géopolitique.",
-    questions: ["L'Europe peut-elle rester technologiquement pertinente face aux États-Unis et à la Chine ?", "Comment construire des marchés de capitaux européens profonds et liquides ?", "Quelle politique industrielle pour une Europe souveraine ?"],
-  },
-  energy: {
-    title: 'Transition Énergétique',
-    body: "L'économie et le financement de la décarbonisation : viabilité économique, structures de financement et politiques publiques.",
-    books: ['David MacKay, Sustainable Energy Without the Hot Air'],
-    research: ['Économie des technologies de capture du carbone (TotalEnergies, 2024)'],
-  },
-  economics: {
-    title: 'Économie',
-    body: 'Théories expliquant la croissance, les institutions et le développement. Fondement de toute analyse des transformations technologiques et de l\'action publique.',
-    thinkers: ['Daron Acemoglu', 'Esther Duflo', 'Paul Romer', 'Friedrich Hayek', 'Kenneth Arrow', 'Jean Tirole'],
-  },
-  math: {
-    title: 'Mathématiques',
-    body: 'Le langage sous-jacent aux modèles, aux algorithmes et à l\'analyse économique rigoureuse.',
-  },
-};
+// (data imported from brain.ts)
 
 // ── SIMULATION STATE ─────────────────────────────────────────
 
@@ -544,13 +409,18 @@ const adjSet = new Set(links.flatMap(l => [`${l.source.id}>${l.target.id}`, `${l
 const isConnected = (a: SimNode, b: SimNode) =>
   adjSet.has(`${a.id}>${b.id}`) || adjSet.has(`${b.id}>${a.id}`);
 
-// Node visual config
-interface NStyle { r: number; fill: string; ring: string; ringW: number; lc: string; fs: number; fw: string }
+// Node sizing (color comes from COLORS per domain)
+interface NStyle { r: number; ringW: number; fs: number; fw: string }
 const NSTYLE: Record<string, NStyle> = {
-  root: { r: 15,  fill: '#f8f8f8', ring: 'rgba(255,255,255,0.5)', ringW: 1.2, lc: '#ffffff',  fs: 12, fw: '600' },
-  l1:   { r: 8,   fill: '#d4d4d4', ring: 'rgba(255,255,255,0.2)', ringW: 0.8, lc: '#eeeeee',  fs: 10, fw: '500' },
-  l2:   { r: 4,   fill: '#7a7a7a', ring: 'rgba(255,255,255,0.12)',ringW: 0.6, lc: '#cccccc',  fs: 9,  fw: '400' },
+  root: { r: 15, ringW: 1.2, fs: 12, fw: '600' },
+  l1:   { r: 8,  ringW: 0.8, fs: 10, fw: '500' },
+  l2:   { r: 4,  ringW: 0.6, fs: 9,  fw: '400' },
 };
+
+function domainOf(n: SimNode): string {
+  return n.type === 'root' ? 'root' : n.type === 'l1' ? n.id : (n.parent ?? 'root');
+}
+function nodeColor(n: SimNode): string { return COLORS[domainOf(n)] ?? '#888'; }
 
 // ── CANVAS SETUP ─────────────────────────────────────────────
 
@@ -586,8 +456,8 @@ function initPositions() {
   const cx = W / 2, cy = H / 2;
   nodes.find(n => n.type === 'root')!.x = cx;
   nodes.find(n => n.type === 'root')!.y = cy;
-  l1.forEach((n, i) => {
-    const a = (i / l1.length) * 2 * Math.PI - Math.PI / 2;
+  l1.forEach(n => {
+    const a = L1_ANGLES[n.id] ?? 0;
     n.x = cx + Math.cos(a) * 190;
     n.y = cy + Math.sin(a) * 190;
   });
@@ -772,25 +642,27 @@ function draw() {
     ctx.save();
     ctx.globalAlpha = dimA;
 
+    const col = nodeColor(n);
+
     // Glow
-    const glowStr = isSel ? 22 : isHov ? 12 : n.type === 'root' ? 6 : 0;
+    const glowStr = isSel ? 24 : isHov ? 14 : n.type === 'root' ? 8 : 0;
     if (glowStr > 0) {
       ctx.shadowBlur = glowStr;
-      ctx.shadowColor = isSel || isHov ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)';
+      ctx.shadowColor = isSel || isHov ? hexAlpha(col, 0.95) : hexAlpha(col, 0.4);
     }
 
     // Fill
     const r = st.r + (isHov || isSel ? 1.5 : 0);
     ctx.beginPath();
     ctx.arc(n.x, n.y, r, 0, 2 * Math.PI);
-    ctx.fillStyle = isHov || isSel ? '#ffffff' : st.fill;
+    ctx.fillStyle = isHov || isSel ? '#ffffff' : col;
     ctx.fill();
 
-    // Ring (reset shadow before stroke)
+    // Ring
     ctx.shadowBlur = 0;
     ctx.beginPath();
     ctx.arc(n.x, n.y, r, 0, 2 * Math.PI);
-    ctx.strokeStyle = isHov || isSel ? 'rgba(255,255,255,0.7)' : st.ring;
+    ctx.strokeStyle = isHov || isSel ? 'rgba(255,255,255,0.7)' : hexAlpha(col, 0.45);
     ctx.lineWidth = st.ringW;
     ctx.stroke();
 
@@ -802,7 +674,7 @@ function draw() {
     ctx.save();
     ctx.globalAlpha = dimA * (isHov || isSel ? 1 : 0.92);
     ctx.font = `${st.fw} ${st.fs}px "Inter Variable", Inter, system-ui, sans-serif`;
-    ctx.fillStyle = isHov || isSel ? '#ffffff' : st.lc;
+    ctx.fillStyle = isHov || isSel ? '#ffffff' : (n.type === 'l2' ? hexAlpha(col, 0.9) : '#f0f0f0');
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     const labelY = n.y + st.r + (isHov || isSel ? 7 : 5);
@@ -1003,14 +875,37 @@ function select(n: SimNode) {
   focusOn(n);
 
   const c = CONTENT[n.id];
+  const col = nodeColor(n);
   pTitle.textContent = c?.title ?? n.label.replace(/\n/g,' ');
+  (pTitle as HTMLElement).style.color = col;
+
   let html = '';
   if (c?.body) html += `<p class="desc">${c.body}</p>`;
+  if (c?.experience) html += `<p class="desc" style="font-style:italic;border-left:2px solid ${col}33;padding-left:0.75rem">${c.experience}</p>`;
   if (c?.books?.length)     html += `<span class="cat">Lectures</span><ul>${c.books.map(b=>`<li>${b}</li>`).join('')}</ul>`;
   if (c?.thinkers?.length)  html += `<span class="cat">Penseurs</span><ul>${c.thinkers.map(t=>`<li>${t}</li>`).join('')}</ul>`;
   if (c?.research?.length)  html += `<span class="cat">Recherche</span><ul>${c.research.map(r=>`<li>${r}</li>`).join('')}</ul>`;
   if (c?.questions?.length) html += `<span class="cat">Questions ouvertes</span><ul>${c.questions.map(q=>`<li>${q}</li>`).join('')}</ul>`;
-  if (!c) html = `<p class="desc">Sous-thème de <em>${n.parent ?? ''}</em>.</p>`;
+  if (!c) {
+    const parentNode = nodeById.get(n.parent ?? '');
+    const parentContent = parentNode ? CONTENT[parentNode.id] : null;
+    html = `<p class="desc">Sous-thème de <em>${parentContent?.title ?? n.parent ?? ''}</em>.</p>`;
+  }
+  // Connexions transversales
+  const conns = LINK_DEFS.filter(l =>
+    (l.source === n.id || l.target === n.id) && l.label &&
+    l.source !== 'root' && l.target !== 'root'
+  );
+  if (conns.length > 0) {
+    html += `<span class="cat">Connexions</span><ul>` +
+      conns.map(l => {
+        const other = l.source === n.id ? l.target : l.source;
+        const otherContent = CONTENT[other];
+        const otherName = otherContent?.title ?? other;
+        return `<li><strong style="color:${COLORS[other] ?? '#aaa'}">${otherName}</strong> — ${l.label}</li>`;
+      }).join('') + `</ul>`;
+  }
+
   pBody.innerHTML = html;
   panel.classList.add('open');
   panel.setAttribute('aria-hidden','false');
@@ -1019,6 +914,7 @@ function select(n: SimNode) {
 
 function deselect() {
   selectedNode = null;
+  (pTitle as HTMLElement).style.color = '';
   panel.classList.remove('open');
   panel.setAttribute('aria-hidden','true');
   focusOut();
@@ -1041,15 +937,6 @@ thoughtBox.addEventListener('click', () => { thoughtBox.hidden = true; clearTime
 
 // ── TIMELINE ─────────────────────────────────────────────────
 
-const TL_LABEL: Record<number, string> = {
-  2021: 'Mathématiques',
-  2022: 'Mathématiques',
-  2023: '+ Économie',
-  2024: '+ Transition Énergétique',
-  2025: '+ IA · Marchés de Capitaux',
-  2026: '+ Innovation · Europe · Politique industrielle',
-  2027: 'Vue complète',
-};
 
 const btnTL   = document.getElementById('btn-timeline')!;
 const tlBar   = document.getElementById('timeline-bar')!;
