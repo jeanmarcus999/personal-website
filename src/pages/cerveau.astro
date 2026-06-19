@@ -545,10 +545,11 @@ const isConnected = (a: SimNode, b: SimNode) =>
   adjSet.has(`${a.id}>${b.id}`) || adjSet.has(`${b.id}>${a.id}`);
 
 // Node visual config
-const NSTYLE: Record<string, { r: number; fill: string; lc: string; fs: number; fw: string }> = {
-  root: { r: 18,  fill: '#f0f0f0', lc: '#ffffff', fs: 13, fw: '700' },
-  l1:   { r: 9.5, fill: '#c0c0c0', lc: '#f0f0f0', fs: 11, fw: '600' },
-  l2:   { r: 5,   fill: '#909090', lc: '#d8d8d8', fs: 10, fw: '500' },
+interface NStyle { r: number; fill: string; ring: string; ringW: number; lc: string; fs: number; fw: string }
+const NSTYLE: Record<string, NStyle> = {
+  root: { r: 15,  fill: '#f8f8f8', ring: 'rgba(255,255,255,0.5)', ringW: 1.2, lc: '#ffffff',  fs: 12, fw: '600' },
+  l1:   { r: 8,   fill: '#d4d4d4', ring: 'rgba(255,255,255,0.2)', ringW: 0.8, lc: '#eeeeee',  fs: 10, fw: '500' },
+  l2:   { r: 4,   fill: '#7a7a7a', ring: 'rgba(255,255,255,0.12)',ringW: 0.6, lc: '#cccccc',  fs: 9,  fw: '400' },
 };
 
 // ── CANVAS SETUP ─────────────────────────────────────────────
@@ -771,27 +772,40 @@ function draw() {
     ctx.save();
     ctx.globalAlpha = dimA;
 
-    if (isHov || isSel) {
-      ctx.shadowBlur = isSel ? 28 : 14;
-      ctx.shadowColor = 'rgba(255,255,255,0.8)';
+    // Glow
+    const glowStr = isSel ? 22 : isHov ? 12 : n.type === 'root' ? 6 : 0;
+    if (glowStr > 0) {
+      ctx.shadowBlur = glowStr;
+      ctx.shadowColor = isSel || isHov ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)';
     }
 
+    // Fill
+    const r = st.r + (isHov || isSel ? 1.5 : 0);
     ctx.beginPath();
-    ctx.arc(n.x, n.y, st.r + (isHov || isSel ? 1.5 : 0), 0, 2 * Math.PI);
+    ctx.arc(n.x, n.y, r, 0, 2 * Math.PI);
     ctx.fillStyle = isHov || isSel ? '#ffffff' : st.fill;
     ctx.fill();
+
+    // Ring (reset shadow before stroke)
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = isHov || isSel ? 'rgba(255,255,255,0.7)' : st.ring;
+    ctx.lineWidth = st.ringW;
+    ctx.stroke();
+
     ctx.restore();
 
     // Label
     const lines = n.label.split('\n');
-    const lineH = st.fs + 2.5;
+    const lineH = st.fs + 3;
     ctx.save();
     ctx.globalAlpha = dimA * (isHov || isSel ? 1 : 0.92);
-    ctx.font = `${st.fw} ${st.fs}px Inter, system-ui, sans-serif`;
+    ctx.font = `${st.fw} ${st.fs}px "Inter Variable", Inter, system-ui, sans-serif`;
     ctx.fillStyle = isHov || isSel ? '#ffffff' : st.lc;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    const labelY = n.y + st.r + 5;
+    const labelY = n.y + st.r + (isHov || isSel ? 7 : 5);
     lines.forEach((ln, i) => ctx.fillText(ln, n.x, labelY + i * lineH));
     ctx.restore();
   }
@@ -1083,8 +1097,10 @@ tlPlay.addEventListener('click', () => {
 
 // ── BOOT ─────────────────────────────────────────────────────
 
-resize();
-initPositions();
-start();
+document.fonts.ready.then(() => {
+  resize();
+  initPositions();
+  start();
+});
 
 </script>
