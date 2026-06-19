@@ -6,6 +6,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   html:has(#brain-root) {
     background: #0b0b0b;
   }
+  html:has(#brain-root) header {
+    background: #FBFAF7;
+    border-color: #E8E5DD;
+  }
+  html:has(#brain-root) header a,
+  html:has(#brain-root) header nav a {
+    color: #1A1A1A;
+  }
 </style>
 
 <BaseLayout
@@ -129,7 +137,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   #panel-body p.desc {
     font-family: "Source Serif 4 Variable", Georgia, serif;
     font-size: 0.88rem;
-    color: #808080;
+    color: #c8c8c8;
     line-height: 1.75;
     margin: 0 0 1.2rem;
     text-align: justify;
@@ -156,7 +164,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   #panel-body li {
     font-family: "Inter Variable", system-ui, sans-serif;
     font-size: 0.79rem;
-    color: #aaa;
+    color: #c8c8c8;
     padding: 0.28rem 0;
     border-bottom: 1px solid rgba(255,255,255,0.04);
     line-height: 1.5;
@@ -659,9 +667,9 @@ function draw() {
     ctx.moveTo(s.x, s.y);
     ctx.lineTo(t.x, t.y);
     ctx.strokeStyle = isHL
-      ? `rgba(200,200,200,${0.35 * vis})`
-      : `rgba(255,255,255,${0.12 * vis})`;
-    ctx.lineWidth = isHL ? 0.7 : 0.35;
+      ? `rgba(220,220,220,${0.55 * vis})`
+      : `rgba(255,255,255,${0.28 * vis})`;
+    ctx.lineWidth = isHL ? 0.9 : 0.5;
     ctx.stroke();
   }
 

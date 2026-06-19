@@ -10,6 +10,7 @@ const posts = defineCollection({
     draft:       z.boolean().default(false),
     type:        z.enum(['note', 'article']).default('note'),
     coauthors:   z.array(z.string()).optional(),
+    externalUrl: z.string().url().optional(),
   }),
 });
 

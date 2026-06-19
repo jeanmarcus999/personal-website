@@ -41,7 +41,7 @@ interface Entry {
   supervisor?:  string;
   subUrl?:      string;
   body:         string;
-  papers?:      Array<{ title: string; url: string }>;
+  papers?:      Array<{ title: string; url: string; date?: string }>;
 }
 
 const experience: Entry[] = [
@@ -85,6 +85,7 @@ const recherche: Entry[] = [
       {
         title: 'A Survey on Data-Dependent Worst-Case Generalization Bounds',
         url:   'https://arxiv.org/abs/2605.13913',
+        date:  'Mai 2026',
       },
     ],
   },
@@ -102,6 +103,7 @@ const recherche: Entry[] = [
       {
         title: 'The Economic Viability of Carbon Capture and Storage (CCS): Supply Curves from Project Data (2030) and Scenario-Based Demand to 2050',
         url:   'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6585338',
+        date:  'Avril 2026',
       },
     ],
   },
@@ -144,7 +146,7 @@ const recherche: Entry[] = [
           )}
           {e.papers?.map(p => (
             <p class="meta mt-2 mb-0">
-              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint —</span>
+              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint{p.date ? `, ${p.date}` : ''} —</span>
               <a
                 href={p.url}
                 target="_blank"
@@ -185,7 +187,7 @@ const recherche: Entry[] = [
           )}
           {e.papers?.map(p => (
             <p class="meta mt-2 mb-0">
-              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint —</span>
+              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint{p.date ? `, ${p.date}` : ''} —</span>
               <a
                 href={p.url}
                 target="_blank"
@@ -226,7 +228,7 @@ const recherche: Entry[] = [
           )}
           {e.papers?.map(p => (
             <p class="meta mt-2 mb-0">
-              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint —</span>
+              <span style="color:var(--color-muted);margin-right:0.4rem">Preprint{p.date ? `, ${p.date}` : ''} —</span>
               <a
                 href={p.url}
                 target="_blank"
