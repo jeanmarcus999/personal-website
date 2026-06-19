@@ -466,10 +466,10 @@ function initPositions() {
     const siblings = arr.filter(s => s.parent === n.parent);
     const si = siblings.indexOf(n);
     const pa = Math.atan2(parent.y - cy, parent.x - cx);
-    const spread = 0.7;
+    const spread = 1.1;
     const a = pa + (si - (siblings.length - 1) / 2) * spread;
-    n.x = parent.x + Math.cos(a) * 100;
-    n.y = parent.y + Math.sin(a) * 100;
+    n.x = parent.x + Math.cos(a) * 130;
+    n.y = parent.y + Math.sin(a) * 130;
   });
 }
 
@@ -480,8 +480,8 @@ let rafId = 0;
 
 function nodeCharge(n: SimNode) {
   if (n.type === 'root') return 800;
-  if (n.type === 'l1')   return 200;
-  return 60;
+  if (n.type === 'l1')   return 260;
+  return 120;
 }
 
 function tick() {
@@ -668,17 +668,31 @@ function draw() {
 
     ctx.restore();
 
-    // Label
+    // Label — radially away from parent (L2) or canvas centre (L1/root)
     const lines = n.label.split('\n');
-    const lineH = st.fs + 3;
+    const lineH = st.fs + 3.5;
     ctx.save();
-    ctx.globalAlpha = dimA * (isHov || isSel ? 1 : 0.92);
-    ctx.font = `${st.fw} ${st.fs}px "Inter Variable", Inter, system-ui, sans-serif`;
-    ctx.fillStyle = isHov || isSel ? '#ffffff' : (n.type === 'l2' ? hexAlpha(col, 0.9) : '#f0f0f0');
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    const labelY = n.y + st.r + (isHov || isSel ? 7 : 5);
-    lines.forEach((ln, i) => ctx.fillText(ln, n.x, labelY + i * lineH));
+    ctx.globalAlpha = dimA * (isHov || isSel ? 1 : 0.88);
+    ctx.font = `${st.fw} ${st.fs}px Inter, system-ui, sans-serif`;
+    ctx.fillStyle = isHov || isSel ? '#ffffff' : (n.type === 'l2' ? hexAlpha(col, 0.88) : '#f0f0f0');
+    {
+      const refX = n.type === 'l2'
+        ? (nodeById.get(n.parent!)?.x ?? W / 2)
+        : W / 2;
+      const refY = n.type === 'l2'
+        ? (nodeById.get(n.parent!)?.y ?? H / 2)
+        : H / 2;
+      const dx = n.x - refX, dy = n.y - refY;
+      const len = Math.sqrt(dx * dx + dy * dy) || 1;
+      const nx = dx / len, ny = dy / len;
+      const pad = st.r + (isHov || isSel ? 8 : 6);
+      const lbx = n.x + nx * pad;
+      const lby = n.y + ny * pad;
+      ctx.textAlign = nx > 0.35 ? 'left' : nx < -0.35 ? 'right' : 'center';
+      ctx.textBaseline = ny >= 0 ? 'top' : 'bottom';
+      const sign = ny >= 0 ? 1 : -1;
+      lines.forEach((ln, i) => ctx.fillText(ln, lbx, lby + i * lineH * sign));
+    }
     ctx.restore();
   }
 

@@ -102,7 +102,7 @@ export const LINK_DEFS: LinkDef[] = [
   ...(['economics','innovation','industrial_policy','europe','capital','energy','ai','math'] as string[])
     .map(t => ({ source: 'root', target: t, dist: 190 })),
   // L1 → L2
-  ...NODE_DEFS.filter(n => n.parent).map(n => ({ source: n.parent!, target: n.id, dist: 85 })),
+  ...NODE_DEFS.filter(n => n.parent).map(n => ({ source: n.parent!, target: n.id, dist: 118 })),
   // Liens transversaux originaux
   { source: 'math',             target: 'ai',               dist: 230, w: 0.14, label: 'Outils formels de l\'apprentissage profond' },
   { source: 'math',             target: 'economics',        dist: 245, w: 0.14, label: 'Formalisation mathématique de la théorie économique' },
