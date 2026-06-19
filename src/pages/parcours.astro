@@ -42,7 +42,7 @@ interface Entry {
   supervisor?:  string;
   subUrl?:      string;
   body:         string;
-  papers?:      Array<{ title: string; url: string; date?: string }>;
+  papers?:      Array<{ title: string; url: string; date?: string; corresponding?: boolean; first?: boolean }>;
 }
 
 const experience: Entry[] = [
@@ -87,6 +87,7 @@ const recherche: Entry[] = [
         title: 'A Survey on Data-Dependent Worst-Case Generalization Bounds',
         url:   'https://arxiv.org/abs/2605.13913',
         date:  'Mai 2026',
+        first: true,
       },
     ],
   },
@@ -105,6 +106,8 @@ const recherche: Entry[] = [
         title: 'The Economic Viability of Carbon Capture and Storage (CCS): Supply Curves from Project Data (2030) and Scenario-Based Demand to 2050',
         url:   'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6585338',
         date:  'Avril 2026',
+        first: true,
+        corresponding: true,
       },
     ],
   },
@@ -154,6 +157,11 @@ const recherche: Entry[] = [
                 rel="noopener noreferrer"
                 style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
               >{p.title}</a>
+              {(p.first || p.corresponding) && (
+                <span style="margin-left:0.5rem;color:var(--color-muted)">
+                  ({[p.first && 'premier auteur', p.corresponding && 'auteur correspondant'].filter(Boolean).join(', ')})
+                </span>
+              )}
             </p>
           ))}
         </div>
@@ -195,6 +203,11 @@ const recherche: Entry[] = [
                 rel="noopener noreferrer"
                 style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
               >{p.title}</a>
+              {(p.first || p.corresponding) && (
+                <span style="margin-left:0.5rem;color:var(--color-muted)">
+                  ({[p.first && 'premier auteur', p.corresponding && 'auteur correspondant'].filter(Boolean).join(', ')})
+                </span>
+              )}
             </p>
           ))}
         </div>
@@ -236,6 +249,11 @@ const recherche: Entry[] = [
                 rel="noopener noreferrer"
                 style="color:var(--color-accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px"
               >{p.title}</a>
+              {(p.first || p.corresponding) && (
+                <span style="margin-left:0.5rem;color:var(--color-muted)">
+                  ({[p.first && 'premier auteur', p.corresponding && 'auteur correspondant'].filter(Boolean).join(', ')})
+                </span>
+              )}
             </p>
           ))}
         </div>
