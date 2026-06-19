@@ -14,6 +14,50 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   html:has(#brain-root) header nav a {
     color: #1A1A1A;
   }
+
+  /* Panel body content — injecté via innerHTML, le CSS scopé ne s'applique pas */
+  #panel-body p.desc {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 0.88rem;
+    color: #d0d0d0;
+    line-height: 1.75;
+    margin: 0 0 1.2rem;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+  #panel-body .cat {
+    display: block;
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #777;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    margin: 1.4rem 0 0.6rem;
+  }
+  #panel-body ul {
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  #panel-body li {
+    font-family: "Inter Variable", system-ui, sans-serif;
+    font-size: 0.79rem;
+    color: #c8c8c8;
+    padding: 0.28rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.5;
+  }
+  #panel-body li::before {
+    content: '·';
+    color: #666;
+    margin-right: 0.55rem;
+  }
+  #panel-body em {
+    font-style: italic;
+    color: inherit;
+  }
 </style>
 
 <BaseLayout
@@ -887,6 +931,20 @@ pClose.addEventListener('click', deselect);
 
 function select(n: SimNode) {
   selectedNode = n;
+
+  // Push connected nodes outward + nudge tout le graphe
+  for (const adj of nodes) {
+    if (adj === n) continue;
+    const dx = adj.x - n.x, dy = adj.y - n.y;
+    const d = Math.sqrt(dx * dx + dy * dy) || 1;
+    const str = isConnected(adj, n) ? 18 : 4;
+    adj.vx += (dx / d) * str;
+    adj.vy += (dy / d) * str;
+  }
+  alpha = Math.max(alpha, 0.7);
+  cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(tick);
+
   const c = CONTENT[n.id];
   pTitle.textContent = c?.title ?? n.label.replace(/\n/g,' ');
   let html = '';

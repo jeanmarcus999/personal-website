@@ -1,0 +1,74 @@
+Cerveau — Arborescence complète
+================================
+
+Transformation Technologique  [racine]
+│
+├── Innovation  [L1 · 2026]
+│   ├── Schumpeter
+│   ├── Destruction créatrice
+│   ├── Technologies générales
+│   ├── Diffusion
+│   └── Productivité
+│
+├── Intelligence Artificielle  [L1 · 2025]
+│   ├── Deep Learning
+│   ├── Généralisation
+│   ├── Modèles de fondation
+│   ├── IA & Économie
+│   └── IA & Santé
+│
+├── Politique Industrielle  [L1 · 2026]
+│   ├── Capacité étatique
+│   ├── Régulation
+│   ├── Innovation de défense
+│   └── Industries stratégiques
+│
+├── Marchés de Capitaux  [L1 · 2025]
+│   ├── Capital-risque
+│   ├── Private Equity
+│   ├── Marchés publics
+│   └── Marchés européens
+│
+├── Europe  [L1 · 2026]
+│   ├── Compétitivité
+│   ├── Souveraineté
+│   └── Retard d'innovation
+│
+├── Transition Énergétique  [L1 · 2024]
+│   ├── Capture CO₂
+│   ├── Marchés électriques
+│   ├── Nucléaire
+│   └── Finance verte
+│
+├── Économie  [L1 · 2023]
+│   ├── Théorie de la croissance
+│   ├── Économie du développement
+│   ├── Institutions
+│   └── Org. industrielle
+│
+└── Mathématiques  [L1 · 2021]
+    ├── Probabilités
+    ├── Optimisation
+    ├── Géométrie
+    └── Processus stochastiques
+
+
+Liens transversaux
+------------------
+Mathématiques          ↔  Intelligence Artificielle
+Mathématiques          ↔  Économie
+Intelligence Artificielle ↔  Innovation
+Marchés de Capitaux    ↔  Europe
+Transition Énergétique ↔  Politique Industrielle
+Économie               ↔  Innovation
+Économie du développement ↔  IA & Santé
+Marchés européens      ↔  Retard d'innovation
+
+
+Chronologie (mode timeline)
+----------------------------
+2021  Mathématiques
+2023  + Économie
+2024  + Transition Énergétique
+2025  + Intelligence Artificielle · Marchés de Capitaux
+2026  + Innovation · Europe · Politique Industrielle
